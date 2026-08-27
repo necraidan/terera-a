@@ -1,59 +1,68 @@
-# TereraA
+# Terera'a
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
+Boîte à outils pour un voyage en Polynésie française. « Terera'a » signifie « le voyage » en tahitien.
 
-## Development server
+C'est une PWA installable, pensée pour l'iPhone et pour **fonctionner entièrement hors ligne** : sur un motu, en excursion ou dans un atoll sans réseau, tout reste disponible. Aucune donnée n'est envoyée nulle part, aucune autorisation n'est demandée.
 
-To start a local development server, run:
+## Les outils
 
-```bash
-ng serve
-```
+| Outil               | Ce qu'il fait                                                                                                                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Convertisseur**   | Euro ↔ franc pacifique, dans les deux sens, avec montants rapides. Repose sur la parité fixe légale (1 € = 119,331742 F) : le taux ne varie pas, donc aucune API n'est nécessaire.                      |
+| **Heure**           | Heure de Tahiti et de la France côte à côte, décalage courant (11 h ou 12 h selon l'heure d'été française), convertisseur d'heure avec bascule de jour, et créneau raisonnable pour appeler la famille. |
+| **Lexique**         | Une soixantaine de mots et expressions de reo tahiti, avec prononciation, recherche insensible aux accents et favoris.                                                                                  |
+| **Infos pratiques** | Urgences (numéros cliquables), téléphone et indicatif +689, électricité, usages et politesse, monnaie, saisons et jours fériés.                                                                         |
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Développement
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Le projet utilise **pnpm** et Node 24.
 
 ```bash
-ng generate --help
+pnpm install
+pnpm start          # serveur de développement (service worker désactivé)
+pnpm build          # build de production, dans dist/terera-a/browser
+pnpm lint
+pnpm test
+pnpm format
+pnpm make:icons     # régénère les icônes depuis le SVG de scripts/make-icons.js
 ```
 
-## Building
+Stack : Angular 22 standalone et zoneless, Tailwind CSS 4 (tokens dans `src/styles.css`), `@angular/service-worker`, tests Vitest.
 
-To build the project run:
+Les données (lexique, fiches pratiques) sont des constantes TypeScript typées dans `src/app/shared/data/` : elles sont compilées dans le bundle, donc mises en cache par le service worker et disponibles hors ligne par construction.
+
+### Tester le mode hors ligne et les mises à jour
+
+Le service worker n'est actif qu'en build de production. Pour l'exercer en local :
 
 ```bash
-ng build
+pnpm build
+cp dist/terera-a/browser/index.html dist/terera-a/browser/404.html
+npx http-server dist/terera-a/browser -p 8080 -c-1 --proxy "http://127.0.0.1:8080?"
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+`-c-1` désactive le cache HTTP et `--proxy` fournit le fallback SPA pour les liens profonds. Ouvrez `http://127.0.0.1:8080`, laissez le service worker s'enregistrer (état visible sur `/ngsw/state`), puis coupez le réseau : l'app entière doit continuer à fonctionner.
 
-## Running unit tests
+## Publier une nouvelle version
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+L'app prévient l'utilisateur quand une nouvelle version est disponible et lui permet de la déclencher. Pour que ça marche, chaque release suit ces trois étapes :
 
-```bash
-ng test
-```
+1. **Ajouter une entrée** en tête de `src/app/features/changelog/changelog.data.ts`.
+2. **Incrémenter la version** : `pnpm version patch` (ou `minor`).
+3. **Pousser sur `main`** : le workflow `.github/workflows/deploy.yml` lint, teste, build et déploie sur GitHub Pages.
 
-## Running end-to-end tests
+Un test vérifie que la première entrée du changelog correspond à la version de `package.json` : oublier l'une des deux étapes casse le build, pas l'expérience utilisateur.
 
-For end-to-end (e2e) testing, run:
+Ne déployez jamais un build de développement : la configuration `production` est la seule qui génère `ngsw.json`, et son absence ferait passer les clients déjà installés en mode dégradé.
 
-```bash
-ng e2e
-```
+### Comment la mise à jour est détectée
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+L'identité d'une version, pour le service worker, est l'empreinte de `ngsw.json`. Comme la version et le changelog sont compilés dans le bundle, chaque release modifie mécaniquement un fichier et produit donc une nouvelle empreinte : la détection est garantie.
 
-## Additional Resources
+`UpdateService` (`src/app/core/update.service.ts`) vérifie au démarrage, toutes les 30 minutes, et surtout **au retour de l'app au premier plan** — le déclencheur qui compte sur iPhone, où l'app est suspendue dès qu'on la quitte. Quand une version est prête, une bannière apparaît ; le rechargement n'est jamais automatique, pour ne pas faire perdre une saisie en cours.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+À noter sur iOS : le service worker sert toujours la version en cache d'abord, donc une nouvelle version n'apparaît jamais sur le premier écran mais en cours de session. Et le tout premier lancement après « Ajouter à l'écran d'accueil » doit se faire **en ligne**, le stockage d'une app installée étant isolé de celui de Safari.
+
+## Installer sur iPhone
+
+Ouvrir le site dans Safari, puis Partager → « Sur l'écran d'accueil ». L'app se lance ensuite en plein écran, sans barre d'adresse, et fonctionne en mode avion.

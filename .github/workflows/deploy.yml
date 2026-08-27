@@ -1,0 +1,60 @@
+name: Déploiement GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois ; les pushes intermédiaires sont abandonnés.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+
+      - run: pnpm test
+
+      # La configuration production est la seule qui génère ngsw.json : sans
+      # elle, les clients déjà installés ne verraient plus jamais de mise à jour.
+      - name: Build
+        run: pnpm build --base-href /${{ github.event.repository.name }}/
+
+      # GitHub Pages ne sait pas router une SPA : il sert 404.html pour tout
+      # chemin inconnu. En y copiant index.html, les liens profonds fonctionnent
+      # (utile avant que le service worker ne prenne le relais).
+      - name: Fallback SPA
+        run: cp dist/terera-a/browser/index.html dist/terera-a/browser/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/terera-a/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
