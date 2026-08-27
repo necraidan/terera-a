@@ -97,6 +97,103 @@ export function boundsOf(points: readonly GeoPoint[], marginDegrees = 0): Bounds
   };
 }
 
+/**
+ * Anneau d'un contour, dans l'ordre GeoJSON : `[longitude, latitude]`, à
+ * l'inverse de `GeoPoint`. C'est la forme dans laquelle arrivent les contours
+ * de côte extraits d'OpenStreetMap (scripts/build-coastlines.js).
+ */
+export type Ring = readonly (readonly [number, number])[];
+
+/** Le dixième de pixel suffit largement : au delà, ce sont des octets perdus. */
+const roundPx = (value: number): number => {
+  const rounded = Math.round(value * 10) / 10;
+  return rounded === 0 ? 0 : rounded;
+};
+
+/**
+ * Tracé SVG d'un ensemble d'anneaux, projetés comme le reste de la carte.
+ *
+ * Les anneaux sont concaténés en sous-chemins d'un même `d` : avec le
+ * remplissage `nonzero` par défaut, un anneau tracé en sens inverse creuse
+ * celui qui le contient. C'est ce qui donne son lagon à un atoll sans aucun
+ * traitement particulier, à condition que le jeu de données respecte le sens
+ * de la RFC 7946 — ce que garantit le script d'extraction.
+ */
+export function svgPathFromRings(
+  rings: readonly Ring[],
+  bounds: Bounds,
+  width: number,
+  height: number,
+  padding = 0,
+): string {
+  let path = '';
+
+  for (const ring of rings) {
+    if (ring.length < 3) {
+      continue;
+    }
+    let command = 'M';
+    for (const [lon, lat] of ring) {
+      const { x, y } = projectToSvg({ lat, lon }, bounds, width, height, padding);
+      path += `${command}${roundPx(x)} ${roundPx(y)}`;
+      command = 'L';
+    }
+    path += 'Z';
+  }
+
+  return path;
+}
+
+/**
+ * Boîte englobante d'un contour, élargie d'une fraction de son emprise plutôt
+ * que d'un nombre de degrés : un encart doit respirer autant autour de Maupiti
+ * que d'une île cent fois plus grande.
+ */
+export function boundsOfRings(rings: readonly Ring[], marginRatio = 0): Bounds {
+  const points: GeoPoint[] = [];
+  for (const ring of rings) {
+    for (const [lon, lat] of ring) {
+      points.push({ lat, lon });
+    }
+  }
+
+  const base = boundsOf(points);
+
+  // Un contour réduit à un point donnerait une emprise nulle, donc une division
+  // par zéro à la projection : on lui laisse le minimum vital.
+  const latSpan = Math.max(base.maxLat - base.minLat, 1e-4);
+  const lonSpan = Math.max(base.maxLon - base.minLon, 1e-4);
+
+  return {
+    minLat: base.minLat - latSpan * marginRatio,
+    maxLat: base.minLat + latSpan * (1 + marginRatio),
+    minLon: base.minLon - lonSpan * marginRatio,
+    maxLon: base.minLon + lonSpan * (1 + marginRatio),
+  };
+}
+
+/**
+ * Élargit l'emprise sur son axe le plus court pour qu'elle remplisse un viewBox
+ * du rapport demandé. Sans quoi la projection étirerait le dessin pour occuper
+ * toute la place : une île plus haute que large sortirait aplatie d'un encart
+ * carré.
+ */
+export function fitBoundsToAspect(bounds: Bounds, aspect: number): Bounds {
+  const midLat = (bounds.minLat + bounds.maxLat) / 2;
+  const lonScale = Math.cos(midLat * RAD);
+
+  const latSpan = bounds.maxLat - bounds.minLat;
+  const lonSpan = bounds.maxLon - bounds.minLon;
+
+  if (lonSpan * lonScale < latSpan * aspect) {
+    const grow = ((latSpan * aspect) / lonScale - lonSpan) / 2;
+    return { ...bounds, minLon: bounds.minLon - grow, maxLon: bounds.maxLon + grow };
+  }
+
+  const grow = ((lonSpan * lonScale) / aspect - latSpan) / 2;
+  return { ...bounds, minLat: bounds.minLat - grow, maxLat: bounds.maxLat + grow };
+}
+
 /** `28 km`, `1 400 km`. */
 export function formatKm(km: number): string {
   const rounded = km < 100 ? Math.round(km) : Math.round(km / 10) * 10;

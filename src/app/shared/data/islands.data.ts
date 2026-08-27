@@ -398,4 +398,5 @@ export const SCALE_NOTES: readonly string[] = [
   'La Polynésie française ne compte qu’environ 4 200 km² de terres émergées, un peu moins que les Alpes-Maritimes. Mais ses 118 îles sont éparpillées sur près de 2,5 millions de km² d’océan, soit à peu près la surface de l’Europe.',
   'Papeete est à 250 km de Bora Bora, une cinquantaine de minutes de vol. Mais à 1 400 km des Marquises, l’équivalent d’un Paris vers Varsovieet plus de 1 600 km des Gambier : de 3 h 30 à 4 h de vol.',
   'Conséquence pratique : on ne visite pas la Polynésie comme un pays, mais comme quelques points choisis sur une carte de la taille d’un continent. Enchaîner plus de deux ou trois archipels dans un même séjour coûte surtout du temps de transport.',
+  'Contours : OpenStreetMap, ODbL. Les traits de côte sont extraits des land polygons d’OpenStreetMap, simplifiés à la construction de l’app et embarqués avec elle : ils s’affichent hors ligne comme le reste.',
 ];

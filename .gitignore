@@ -6,6 +6,9 @@
 /out-tsc
 /bazel-out
 
+# Sources de build téléchargées (shapefile OSM de scripts/build-coastlines.js)
+/.cache
+
 # Node
 /node_modules
 npm-debug.log

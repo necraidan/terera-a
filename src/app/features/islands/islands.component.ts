@@ -1,11 +1,16 @@
 import { Component, computed, signal } from '@angular/core';
+import { CoastlineDetail, OVERVIEW_RINGS, loadCoastlineDetail } from '../../shared/data/coastlines';
 import {
+  Bounds,
   bearingLabel,
   boundsOf,
+  boundsOfRings,
+  fitBoundsToAspect,
   formatKm,
   haversineKm,
   initialBearing,
   projectToSvg,
+  svgPathFromRings,
 } from '../../shared/data/geo';
 import {
   ARCHIPELAGOS,
@@ -17,10 +22,26 @@ import {
 import { Island } from '../../shared/data/islands.models';
 import { PageHeaderComponent } from '../../shared/ui/page-header.component';
 
-/** Dimensions du viewBox de la carte. */
+/** Dimensions du viewBox de la carte. Cf. scripts/build-coastlines.js. */
 const MAP_WIDTH = 320;
 const MAP_HEIGHT = 380;
 const MAP_PADDING = 18;
+
+/**
+ * Encart de l'île sélectionnée : le dessin occupe la partie haute, la barre
+ * d'échelle la bande du bas.
+ */
+const INSET_SIZE = 160;
+const INSET_MAP_HEIGHT = 132;
+const INSET_PADDING = 8;
+const INSET_MARGIN_RATIO = 0.15;
+
+/**
+ * Longueurs rondes admises pour une barre d'échelle. La carte d'ensemble couvre
+ * deux mille kilomètres, l'encart quelques dizaines : la même barre doit rester
+ * lisible dans les deux cas.
+ */
+const SCALE_STEPS_KM = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
 
 interface Plotted {
   readonly island: Island;
@@ -49,9 +70,18 @@ const LABEL_SPACING = 24;
           [attr.viewBox]="'0 0 ' + mapWidth + ' ' + mapHeight"
           class="w-full"
           role="img"
-          aria-label="Carte schématique des îles de Polynésie française, positionnées selon leurs coordonnées réelles"
+          [attr.aria-label]="mapLabel"
         >
-          <!-- Repère de l'échelle : un segment de 500 km. -->
+          <!--
+            Fond de carte. À cette échelle la plupart des îles font moins d'un
+            pixel : le remplissage sans contour donne le contexte, un tracé
+            fermerait des formes illisibles.
+          -->
+          @if (landPath()) {
+            <path [attr.d]="landPath()" fill="var(--color-ink-2)" fill-opacity="0.3" />
+          }
+
+          <!-- Repère de l'échelle. -->
           <line
             [attr.x1]="scaleBar().x1"
             [attr.y1]="scaleBar().y"
@@ -67,7 +97,7 @@ const LABEL_SPACING = 24;
             class="fill-current text-ink-2"
             style="font-size: 9px"
           >
-            500 km
+            {{ scaleBar().label }}
           </text>
 
           @for (point of plotted(); track point.island.id) {
@@ -129,18 +159,65 @@ const LABEL_SPACING = 24;
       </select>
 
       <section class="mt-3 rounded-card bg-accent p-4 text-accent-ink">
-        <p class="text-sm font-medium opacity-80">{{ selected().name }}</p>
-        @if (selected().id === reference.id) {
-          <p class="mt-1 text-lg font-semibold">C’est le point de départ.</p>
-        } @else {
-          <p class="text-4xl font-bold tabular-nums">{{ distance() }}</p>
-          <p class="mt-1 text-sm opacity-90">
-            à vol d’oiseau, vers le {{ direction() }}
-            @if (selected().flightMinutesFromPapeete) {
-              · {{ flightLabel() }} de vol
+        <div class="flex items-start gap-3">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-medium opacity-80">{{ selected().name }}</p>
+            @if (selected().id === reference.id) {
+              <p class="mt-1 text-lg font-semibold">C’est le point de départ.</p>
+            } @else {
+              <p class="text-4xl font-bold tabular-nums">{{ distance() }}</p>
+              <p class="mt-1 text-sm opacity-90">
+                à vol d’oiseau, vers le {{ direction() }}
+                @if (selected().flightMinutesFromPapeete) {
+                  · {{ flightLabel() }} de vol
+                }
+              </p>
             }
-          </p>
-        }
+          </div>
+
+          <!--
+            Contour détaillé de l'île. Absent tant que le jeu de données n'est
+            pas chargé, et pour une île qui n'y figure pas : l'encart disparaît,
+            le reste de la carte ne bouge pas.
+          -->
+          @if (inset(); as shape) {
+            <svg
+              [attr.viewBox]="'0 0 ' + insetSize + ' ' + insetSize"
+              class="w-24 shrink-0 sm:w-32"
+              role="img"
+              [attr.aria-label]="'Contour de ' + selected().name + ', échelle ' + shape.label"
+            >
+              <path [attr.d]="shape.path" fill="currentColor" fill-opacity="0.9" />
+              <circle
+                [attr.cx]="shape.markerX"
+                [attr.cy]="shape.markerY"
+                r="5"
+                fill="currentColor"
+                stroke="var(--color-accent)"
+                stroke-width="2.5"
+              />
+              <line
+                [attr.x1]="shape.x1"
+                [attr.y1]="shape.y"
+                [attr.x2]="shape.x2"
+                [attr.y2]="shape.y"
+                stroke="currentColor"
+                stroke-width="2"
+                opacity="0.8"
+              />
+              <text
+                [attr.x]="shape.x1"
+                [attr.y]="shape.y - 6"
+                fill="currentColor"
+                opacity="0.8"
+                style="font-size: 13px"
+              >
+                {{ shape.label }}
+              </text>
+            </svg>
+          }
+        </div>
+
         <dl class="mt-4 grid gap-x-4 gap-y-2 text-sm sm:grid-cols-2">
           <div class="flex justify-between gap-2">
             <dt class="opacity-80">Type</dt>
@@ -222,10 +299,32 @@ export class IslandsComponent {
 
   protected readonly mapWidth = MAP_WIDTH;
   protected readonly mapHeight = MAP_HEIGHT;
+  protected readonly insetSize = INSET_SIZE;
 
   protected readonly selected = signal<Island>(REFERENCE_ISLAND);
 
+  /** Contours détaillés, chargés à la première sélection. Cf. `loadDetail`. */
+  private readonly detail = signal<CoastlineDetail | null>(null);
+  private detailRequested = false;
+
   private readonly bounds = computed(() => boundsOf(ISLANDS, 1.5));
+
+  /**
+   * Fond de carte, projeté sur la même emprise et le même viewBox que les
+   * points : les cercles restent exactement là où ils étaient.
+   */
+  protected readonly landPath = computed(() =>
+    svgPathFromRings(OVERVIEW_RINGS, this.bounds(), MAP_WIDTH, MAP_HEIGHT, MAP_PADDING),
+  );
+
+  /**
+   * Ne promet les contours que s'ils sont là : le jeu de données peut être vide
+   * tant que le script d'extraction n'a pas tourné.
+   */
+  protected readonly mapLabel =
+    OVERVIEW_RINGS.length > 0
+      ? 'Carte des îles de Polynésie française : traits de côte réels d’OpenStreetMap, îles positionnées selon leurs coordonnées réelles'
+      : 'Carte schématique des îles de Polynésie française, positionnées selon leurs coordonnées réelles';
 
   protected readonly plotted = computed<readonly Plotted[]>(() => {
     const bounds = this.bounds();
@@ -269,26 +368,78 @@ export class IslandsComponent {
   });
 
   /** Sans échelle, la carte laisse croire que tout est à portée de pirogue. */
-  protected readonly scaleBar = computed(() => {
-    const bounds = this.bounds();
-    const midLat = (bounds.minLat + bounds.maxLat) / 2;
+  protected readonly scaleBar = computed(() =>
+    this.scaleBarFor(this.bounds(), MAP_WIDTH, MAP_HEIGHT, MAP_PADDING, MAP_HEIGHT - 6),
+  );
 
-    // Largeur en pixels d'un segment de 500 km à la latitude médiane.
-    const west = { lat: midLat, lon: bounds.minLon };
-    const kmPerDegreeLon = haversineKm(west, { lat: midLat, lon: bounds.minLon + 1 });
-    const degrees = 500 / kmPerDegreeLon;
+  /**
+   * Contour de l'île sélectionnée, recadré sur lui même : l'encart change
+   * d'échelle d'une île à l'autre, d'où sa propre barre de repère.
+   */
+  protected readonly inset = computed(() => {
+    const island = this.selected();
+    const rings = this.detail()?.get(island.id);
+    if (!rings || rings.length === 0) {
+      return null;
+    }
 
-    const a = projectToSvg(west, bounds, MAP_WIDTH, MAP_HEIGHT, MAP_PADDING);
-    const b = projectToSvg(
-      { lat: midLat, lon: bounds.minLon + degrees },
-      bounds,
-      MAP_WIDTH,
-      MAP_HEIGHT,
-      MAP_PADDING,
+    const inner = {
+      width: INSET_SIZE - 2 * INSET_PADDING,
+      height: INSET_MAP_HEIGHT - 2 * INSET_PADDING,
+    };
+    const bounds = fitBoundsToAspect(
+      boundsOfRings(rings, INSET_MARGIN_RATIO),
+      inner.width / inner.height,
     );
 
-    return { x1: a.x, x2: b.x, y: MAP_HEIGHT - 6 };
+    const marker = projectToSvg(island, bounds, INSET_SIZE, INSET_MAP_HEIGHT, INSET_PADDING);
+    const scale = this.scaleBarFor(
+      bounds,
+      INSET_SIZE,
+      INSET_MAP_HEIGHT,
+      INSET_PADDING,
+      INSET_SIZE - 8,
+    );
+
+    return {
+      path: svgPathFromRings(rings, bounds, INSET_SIZE, INSET_MAP_HEIGHT, INSET_PADDING),
+      markerX: marker.x,
+      markerY: marker.y,
+      ...scale,
+    };
   });
+
+  /**
+   * Barre d'échelle : la plus grande longueur ronde tenant dans le tiers de la
+   * largeur utile, mesurée par haversine à la latitude médiane. Paramétrée
+   * plutôt que dupliquée, parce que la carte et l'encart ne couvrent pas le
+   * même ordre de grandeur.
+   */
+  private scaleBarFor(
+    bounds: Bounds,
+    width: number,
+    height: number,
+    padding: number,
+    baselineY: number,
+  ): { x1: number; x2: number; y: number; label: string } {
+    const midLat = (bounds.minLat + bounds.maxLat) / 2;
+    const west = { lat: midLat, lon: bounds.minLon };
+
+    const kmPerDegreeLon = haversineKm(west, { lat: midLat, lon: bounds.minLon + 1 });
+    const target = ((bounds.maxLon - bounds.minLon) * kmPerDegreeLon) / 3;
+    const km = SCALE_STEPS_KM.filter((step) => step <= target).pop() ?? SCALE_STEPS_KM[0];
+
+    const a = projectToSvg(west, bounds, width, height, padding);
+    const b = projectToSvg(
+      { lat: midLat, lon: bounds.minLon + km / kmPerDegreeLon },
+      bounds,
+      width,
+      height,
+      padding,
+    );
+
+    return { x1: a.x, x2: b.x, y: baselineY, label: formatKm(km) };
+  }
 
   protected readonly grouped = computed(() =>
     ARCHIPELAGOS.map((archipelago) => ({
@@ -327,5 +478,26 @@ export class IslandsComponent {
     if (found) {
       this.selected.set(found);
     }
+    this.loadDetail();
+  }
+
+  /**
+   * Le détail ne sert qu'à l'encart : on ne le charge qu'à la première
+   * sélection, pour ne pas alourdir l'arrivée sur la carte. Le chunk est un JS
+   * de la même origine, donc déjà précaché — inutile d'annoncer une attente.
+   *
+   * Un échec laisse simplement l'encart absent : le reste de la page n'en
+   * dépend pas.
+   */
+  private loadDetail(): void {
+    if (this.detailRequested) {
+      return;
+    }
+    this.detailRequested = true;
+
+    loadCoastlineDetail().then(
+      (detail) => this.detail.set(detail),
+      () => this.detail.set(new Map()),
+    );
   }
 }

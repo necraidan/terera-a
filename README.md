@@ -41,11 +41,58 @@ pnpm lint
 pnpm test
 pnpm format
 pnpm make:icons     # régénère les icônes depuis le SVG de scripts/make-icons.js
+pnpm make:coastlines <dossier>   # régénère les traits de côte de la carte
 ```
 
 Stack : Angular 22 standalone et zoneless, Tailwind CSS 4 (tokens dans `src/styles.css`), `@angular/service-worker`, tests Vitest.
 
 Les données (lexique, fiches pratiques) sont des constantes TypeScript typées dans `src/app/shared/data/` : elles sont compilées dans le bundle, donc mises en cache par le service worker et disponibles hors ligne par construction.
+
+### Les traits de côte de la carte
+
+La page `/carte` dessine de vrais contours d'îles, dérivés des **land polygons
+d'OpenStreetMap** (© contributeurs d'OpenStreetMap, licence **ODbL** — attribution
+affichée sur la page, dans « L'échelle, vraiment »). Le jeu de données n'est pas
+téléchargé par l'app : [scripts/build-coastlines.js](scripts/build-coastlines.js)
+l'extrait, le découpe, le simplifie, et écrit deux GeoJSON dans
+`src/app/shared/data/`, importés comme des modules — donc bundlés, donc précachés
+par le service worker, sans requête réseau ni `assetGroup` supplémentaire.
+
+Le script se lance à la main et **ses sorties sont commitées** : le build de CI
+n'a rien à télécharger.
+
+> ⚠️ **Les deux GeoJSON sont pour l'instant vides** : ils n'ont pas encore été
+> générés, faute d'accès au shapefile source. La carte fonctionne, sans son
+> fond ; l'encart de zoom reste absent. Passez la commande ci-dessous pour les
+> remplir, puis commitez-les.
+
+```bash
+mkdir -p .cache && cd .cache
+curl -O https://osmdata.openstreetmap.de/download/land-polygons-split-4326.zip
+unzip land-polygons-split-4326.zip
+cd ..
+pnpm make:coastlines .cache/land-polygons-split-4326
+```
+
+Prenez impérativement une variante **4326** (degrés). La variante proposée par
+défaut sur [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de/data/land-polygons.html)
+est en 3857 (mètres Mercator) ; le script la refuse plutôt que de produire des
+contours à l'autre bout du monde. Le dossier `.cache/` est ignoré par git : il
+n'y a que les deux sorties à commiter.
+
+| Fichier                        | Contenu                                                      |
+| ------------------------------ | ------------------------------------------------------------ |
+| `coastlines-overview.geo.json` | Les cinq archipels, pour la carte d'ensemble (cible < 40 ko) |
+| `coastlines-detail.geo.json`   | Le contour de chaque île, pour l'encart (cible < 150 ko)     |
+
+Le script journalise le poids de chaque sortie et **avertit pour toute île de
+`ISLANDS` restée sans contour** : son encart sera simplement absent. Les seuils
+de simplification sont exprimés en pixels du rendu final, pas en degrés, donc
+ajuster les dimensions de la carte dans `islands.component.ts` demande de
+relancer le script — les constantes en tête des deux fichiers vont par paire.
+
+Une île ajoutée à `ISLANDS` est prise en compte sans rien toucher : le script
+relit `islands.data.ts`, qui reste la seule source des coordonnées.
 
 ### Rendre une donnée rafraîchissable
 

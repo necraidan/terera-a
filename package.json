@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,css}\" \"scripts/*.{js,ts}\" \"*.{json,ts,md}\"",
-    "make:icons": "node scripts/make-icons.js"
+    "make:icons": "node scripts/make-icons.js",
+    "make:coastlines": "node scripts/build-coastlines.js"
   },
   "private": true,
   "dependencies": {
