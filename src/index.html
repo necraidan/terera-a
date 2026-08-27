@@ -1,15 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>TereraA</title>
+    <title>Terera'a</title>
     <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- viewport-fit=cover : indispensable pour que env(safe-area-inset-*) soit
+         renseigné en standalone sur iPhone à encoche / Dynamic Island. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Boîte à outils hors ligne pour un voyage en Polynésie française." />
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ec" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b1220" />
+
+    <!-- Installation sur l'écran d'accueil iOS -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Terera'a" />
+
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <link rel="manifest" href="manifest.webmanifest" />
   </head>
   <body>
     <ta-root></ta-root>
-    <noscript>Please enable JavaScript to continue using this application.</noscript>
+    <noscript>Cette application nécessite JavaScript pour fonctionner.</noscript>
   </body>
 </html>
