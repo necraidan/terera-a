@@ -10,7 +10,7 @@ describe('environnement de test', () => {
 
   it('utilise la détection de changement zoneless, comme la production', () => {
     // En zoneless, Angular fournit une NgZone inerte : rien ne patche les APIs du
-    // navigateur, et aucun cycle de détection n'est déclenché par les tâches. Si
+    // navigateuret aucun cycle de détection n'est déclenché par les tâches. Si
     // ce test casse, les autres vérifieraient un comportement que la production
     // n'a pas.
     expect(TestBed.inject(NgZone).constructor.name).toBe('NoopNgZone');

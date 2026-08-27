@@ -67,7 +67,7 @@ export const LINK_CATEGORIES: readonly LinkCategory[] = [
         title: 'Air Tahiti (vols intérieurs)',
         url: 'https://www.airtahiti.com/',
         purpose:
-          'Unique compagnie régulière des vols entre les îles : horaires, réservations, passes interinsulaires. Indispensable avant le départ pour caler les sauts d’île en île, et sur place pour les modifications.',
+          'Unique compagnie régulière des vols entre les îles : horaires, réservations, passes interinsulaires. Indispensable avant le départ pour caler les sauts d’île en îleet sur place pour les modifications.',
         essential: true,
       },
       {

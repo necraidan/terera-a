@@ -14,7 +14,7 @@
   --color-coral: #e2604f; /* corail */
   --color-danger: #c62828;
 
-  /* Inter est auto-hébergée (public/fonts/) et precachée par le service worker :
+  /* Inter est auto-hébergée (src/fonts/) et precachée par le service worker :
      le rendu est identique hors ligne et sur tous les appareils. La pile système
      reste en repli, donc l'app s'affiche correctement même si la police échoue. */
   --font-sans:
@@ -45,7 +45,10 @@
    téléchargement complet de la police (52 ko au lieu de 26). */
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/inter-variable.woff2') format('woff2');
+  /* Referencee depuis src/ pour que le bundler la hache et emette une URL
+     relative : l'app est servie depuis un sous-chemin (/terera-a/ sur GitHub
+     Pages), ou un chemin absolu comme /fonts/... renvoie un 404. */
+  src: url('./fonts/inter-variable.woff2') format('woff2');
   font-weight: 100 900;
   font-display: swap;
 }

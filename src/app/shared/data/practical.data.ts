@@ -104,7 +104,7 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
           'Le maillot de bain reste sur la plage : en ville et dans les commerces, on se couvre.',
           'Le monoï et les crèmes solaires classiques abîment le corail : préférez une protection minérale « reef safe ».',
           'Retirez vos chaussures avant d’entrer chez quelqu’un.',
-          'Le rythme est tranquille : beaucoup de commerces ferment tôt, et le dimanche est très calme.',
+          'Le rythme est tranquille : beaucoup de commerces ferment tôtet le dimanche est très calme.',
           'Demandez avant de photographier une personne, une cérémonie ou un marae (site sacré).',
         ],
       },
@@ -132,7 +132,7 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
       },
       {
         kind: 'paragraph',
-        text: 'Le taux est fixé par la loi et ne varie pas : le convertisseur de cette app est donc exact en permanence, sans connexion.',
+        text: 'Le taux est fixé par la loi et ne varie pas : le convertisseur de cette app est donc exact en permanence.',
       },
       {
         kind: 'paragraph',
@@ -157,7 +157,7 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
     sections: [
       {
         kind: 'paragraph',
-        text: 'Deux saisons : la saison sèche et fraîche de mai à octobre (l’hiver austral, le meilleur moment pour voyager), et la saison chaude et humide de novembre à avril, plus pluvieuse et propice aux dépressions tropicales.',
+        text: 'Deux saisons : la saison sèche et fraîche de mai à octobre (l’hiver austral, le meilleur moment pour voyager)et la saison chaude et humide de novembre à avril, plus pluvieuse et propice aux dépressions tropicales.',
       },
       {
         kind: 'list',

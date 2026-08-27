@@ -12,7 +12,7 @@
           "/manifest.webmanifest",
           "/*.css",
           "/*.js",
-          "/fonts/*.woff2"
+          "/media/*.woff2"
         ]
       }
     },

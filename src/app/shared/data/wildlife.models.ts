@@ -2,7 +2,7 @@
  * Niveau de risque réel pour un humain, sans dramatiser ni minimiser.
  *
  * `aucun` ne veut pas dire qu'on peut toucher : la plupart de ces espèces sont
- * protégées, et le risque décrit ici est celui couru par l'humain, pas celui
+ * protégéeset le risque décrit ici est celui couru par l'humain, pas celui
  * que l'humain fait courir à l'animal.
  */
 export type MarineRisk = 'aucun' | 'faible' | 'modere' | 'eleve';

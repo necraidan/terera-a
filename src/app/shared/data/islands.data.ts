@@ -5,7 +5,7 @@ import { Archipelago, Island, SeaLink } from './islands.models';
  *
  * Liste unique, partagée par la carte et par l'écran soleil et marées. Les
  * coordonnées visent la localité principale plutôt que le centre de l'île :
- * c'est ce qui compte pour calculer un lever de soleil, et l'écart reste sous la
+ * c'est ce qui compte pour calculer un lever de soleilet l'écart reste sous la
  * minute d'arc pour une distance inter-îles.
  *
  * Aucune distance n'est stockée : elles sont calculées depuis les coordonnées
@@ -389,13 +389,13 @@ export const SEA_LINKS: readonly SeaLink[] = [
   },
   {
     route: 'Papeete vers les Australes et Rapa',
-    note: 'Un cargo mixte dessert seul l’ensemble des Australes, avec une quarantaine de rotations par an : un circuit court de 6 jours et 7 nuits sur les îles pourvues d’une piste, et un circuit long de 9 jours et 10 nuits qui inclut Rapa. Une douzaine de rotations seulement passent par Rapa, seul accès à cette île.',
+    note: 'Un cargo mixte dessert seul l’ensemble des Australes, avec une quarantaine de rotations par an : un circuit court de 6 jours et 7 nuits sur les îles pourvues d’une pisteet un circuit long de 9 jours et 10 nuits qui inclut Rapa. Une douzaine de rotations seulement passent par Rapa, seul accès à cette île.',
   },
 ];
 
 /** Ce qui frappe le plus quand on regarde la carte pour la première fois. */
 export const SCALE_NOTES: readonly string[] = [
   'La Polynésie française ne compte qu’environ 4 200 km² de terres émergées, un peu moins que les Alpes-Maritimes. Mais ses 118 îles sont éparpillées sur près de 2,5 millions de km² d’océan, soit à peu près la surface de l’Europe.',
-  'Papeete est à 250 km de Bora Bora, une cinquantaine de minutes de vol. Mais à 1 400 km des Marquises, l’équivalent d’un Paris vers Varsovie, et plus de 1 600 km des Gambier : de 3 h 30 à 4 h de vol.',
+  'Papeete est à 250 km de Bora Bora, une cinquantaine de minutes de vol. Mais à 1 400 km des Marquises, l’équivalent d’un Paris vers Varsovieet plus de 1 600 km des Gambier : de 3 h 30 à 4 h de vol.',
   'Conséquence pratique : on ne visite pas la Polynésie comme un pays, mais comme quelques points choisis sur une carte de la taille d’un continent. Enchaîner plus de deux ou trois archipels dans un même séjour coûte surtout du temps de transport.',
 ];

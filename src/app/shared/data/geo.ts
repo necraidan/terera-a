@@ -1,6 +1,6 @@
 /**
  * Les distances sont calculées depuis les coordonnées plutôt que stockées : toute
- * paire d'îles devient comparable, et il n'y a qu'une source à tenir à jour.
+ * paire d'îles devient comparableet il n'y a qu'une source à tenir à jour.
  */
 
 export interface GeoPoint {

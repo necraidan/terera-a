@@ -97,9 +97,8 @@ const MAX_DAY_OFFSET = 180;
             </div>
           </dl>
           <p class="mt-4 text-xs opacity-80">
-            Calculé sur place pour {{ island().place ?? island().name }}, sans connexion. Le
-            crépuscule est court sous ces latitudes : comptez 21 à 25 minutes entre le coucher et la
-            nuit civile.
+            Calculé sur place pour {{ island().place ?? island().name }}. Le crépuscule est court
+            sous ces latitudes : comptez 21 à 25 minutes entre le coucher et la nuit civile.
           </p>
         </section>
 
@@ -143,7 +142,7 @@ const MAX_DAY_OFFSET = 180;
             <p class="mt-1 text-sm leading-relaxed text-ink-2">
               La Société se trouve presque sur un point amphidromique de l’onde lunaire, le point
               autour duquel cette onde tourne et où son amplitude s’annule. La composante lunaire y
-              est donc presque effacée, et c’est la composante solaire qui domine. Comme elle a une
+              est donc presque effacéeet c’est la composante solaire qui domine. Comme elle a une
               période de douze heures exactement, la marée revient aux mêmes heures tous les jours.
               C’est un cas très rare dans le monde.
             </p>

@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'fr-FR' },
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    // Pas de provideHttpClient : rien n'a besoin du réseau, et le fournir « au cas
+    // Pas de provideHttpClient : rien n'a besoin du réseauet le fournir « au cas
     // où » coûterait 5 ko gzip pour du code jamais appelé. Le README décrit les
     // trois changements à faire le jour où une donnée devra être rafraîchie.
     provideRouter(

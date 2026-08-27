@@ -6,24 +6,24 @@ C'est une PWA installable, pensée pour l'iPhone et pour **fonctionner entièrem
 
 ## Les outils
 
-| Outil                  | Ce qu'il fait                                                                                                                                                                                                                                                         |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Convertisseur**      | Franc pacifique ↔ Euro, dans les deux sens, avec montants rapides. Repose sur la parité fixe légale (1 € = 119,331742 F) : le taux ne varie pas, donc aucune API n'est nécessaire.                                                                                    |
-| **Billets et pièces**  | Les quatre billets et les six pièces de la série en cours, dessinés à l'échelle réelle. Couleurs, motifs, dimensions, équivalent en euros, ce que chaque coupure permet d'acheter, et les pièges de reconnaissance (le 20 F argenté est plus large que le 50 F doré). |
-| **Heure**              | Heure de Tahiti et de la France côte à côte, décalage courant (11 h ou 12 h selon l'heure d'été française), convertisseur d'heure avec bascule de jour, et créneau raisonnable pour appeler la famille.                                                               |
-| **Unités**             | Milles nautiques, nœuds, pieds, brasses, degrés Fahrenheit. Tous les facteurs sont des définitions exactes.                                                                                                                                                           |
-| **Soleil et marées**   | Lever, coucher, aube et nuit civile calculés localement pour 19 îles avec l'algorithme solaire de la NOAA. Plus le régime de marée par archipel, dont le cas remarquable de la Société où les heures suivent le soleil et non la lune.                                |
-| **Carte et distances** | Les cinq archipels sur une carte hors ligne, les îles positionnées selon leurs coordonnées réelles, avec échelle. Distances et caps calculés depuis les coordonnées, durées de vol et liaisons maritimes.                                                             |
-| **Faune marine**       | 18 espèces avec nom tahitien, saison de présence, niveau de risque réel pour l'humain, règles d'approche et statut de protection. Plus la réglementation du sanctuaire des mammifères marins.                                                                         |
-| **Lexique**            | Une centaine de mots et expressions de reo tahiti, plus 56 noms de lieux avec leur prononciation. Recherche insensible aux accents, favoris, et une page de règles de prononciation.                                                                                  |
-| **Infos pratiques**    | Urgences (numéros cliquables), téléphone et indicatif +689, électricité, usages et politesse, monnaie, saisons et jours fériés.                                                                                                                                       |
-| **Liens utiles**       | 47 sites officiels et pérennes, vérifiés un par un et rangés par usage. C'est le seul écran qui demande une connexion, et il le dit.                                                                                                                                  |
+| Outil                  | Ce qu'il fait                                                                                                                                                                                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Convertisseur**      | Franc pacifique ↔ Euro, dans les deux sens, avec montants rapides. Repose sur la parité fixe légale (1 € = 119,331742 F) : le taux ne varie pas, donc aucune API n'est nécessaire.                                                                                  |
+| **Billets et pièces**  | Les quatre billets et les six pièces de la série en cours, dessinés à l'échelle réelle. Couleurs, motifs, dimensions, équivalent en euros, ce que chaque coupure permet d'acheteret les pièges de reconnaissance (le 20 F argenté est plus large que le 50 F doré). |
+| **Heure**              | Heure de Tahiti et de la France côte à côte, décalage courant (11 h ou 12 h selon l'heure d'été française), convertisseur d'heure avec bascule de jouret créneau raisonnable pour appeler la famille.                                                               |
+| **Unités**             | Milles nautiques, nœuds, pieds, brasses, degrés Fahrenheit. Tous les facteurs sont des définitions exactes.                                                                                                                                                         |
+| **Soleil et marées**   | Lever, coucher, aube et nuit civile calculés localement pour 19 îles avec l'algorithme solaire de la NOAA. Plus le régime de marée par archipel, dont le cas remarquable de la Société où les heures suivent le soleil et non la lune.                              |
+| **Carte et distances** | Les cinq archipels sur une carte hors ligne, les îles positionnées selon leurs coordonnées réelles, avec échelle. Distances et caps calculés depuis les coordonnées, durées de vol et liaisons maritimes.                                                           |
+| **Faune marine**       | 18 espèces avec nom tahitien, saison de présence, niveau de risque réel pour l'humain, règles d'approche et statut de protection. Plus la réglementation du sanctuaire des mammifères marins.                                                                       |
+| **Lexique**            | Une centaine de mots et expressions de reo tahiti, plus 56 noms de lieux avec leur prononciation. Recherche insensible aux accents, favoriset une page de règles de prononciation.                                                                                  |
+| **Infos pratiques**    | Urgences (numéros cliquables), téléphone et indicatif +689, électricité, usages et politesse, monnaie, saisons et jours fériés.                                                                                                                                     |
+| **Liens utiles**       | 47 sites officiels et pérennes, vérifiés un par un et rangés par usage. C'est le seul écran qui demande une connexionet il le dit.                                                                                                                                  |
 
 ## Sur la vérification du contenu
 
 Le contenu factuel a été recherché puis soumis à une relecture adversariale, chargée de réfuter chaque affirmation plutôt que de la valider. Plusieurs erreurs ont ainsi été corrigées avant intégration : une distance inter-îles fausse de 100 km, une série de pièces obsolète, une affirmation inexacte sur le rôle du calendrier lunaire dans les marées, des noms tahitiens non attestés, un prix de repas sous-évalué.
 
-Les données qui peuvent se vérifier par le calcul le sont : aucune distance n'est stockée, elles sont dérivées des coordonnées, et un test compare les distances obtenues aux valeurs publiées ainsi que les durées de vol aux vitesses plausibles d'un ATR.
+Les données qui peuvent se vérifier par le calcul le sont : aucune distance n'est stockée, elles sont dérivées des coordonnéeset un test compare les distances obtenues aux valeurs publiées ainsi que les durées de vol aux vitesses plausibles d'un ATR.
 
 ### Photos
 
@@ -79,16 +79,16 @@ L'app prévient l'utilisateur quand une nouvelle version est disponible et lui p
 
 Un test vérifie que la première entrée du changelog correspond à la version de `package.json` : oublier l'une des deux étapes casse le build, pas l'expérience utilisateur.
 
-Ne déployez jamais un build de développement : la configuration `production` est la seule qui génère `ngsw.json`, et son absence ferait passer les clients déjà installés en mode dégradé.
+Ne déployez jamais un build de développement : la configuration `production` est la seule qui génère `ngsw.json`et son absence ferait passer les clients déjà installés en mode dégradé.
 
 ### Comment la mise à jour est détectée
 
 L'identité d'une version, pour le service worker, est l'empreinte de `ngsw.json`. Comme la version et le changelog sont compilés dans le bundle, chaque release modifie mécaniquement un fichier et produit donc une nouvelle empreinte : la détection est garantie.
 
-`UpdateService` (`src/app/core/update.service.ts`) vérifie au démarrage, toutes les 30 minutes, et surtout **au retour de l'app au premier plan**, le déclencheur qui compte sur iPhone, où l'app est suspendue dès qu'on la quitte. Quand une version est prête, une bannière apparaît ; le rechargement n'est jamais automatique, pour ne pas faire perdre une saisie en cours.
+`UpdateService` (`src/app/core/update.service.ts`) vérifie au démarrage, toutes les 30 minuteset surtout **au retour de l'app au premier plan**, le déclencheur qui compte sur iPhone, où l'app est suspendue dès qu'on la quitte. Quand une version est prête, une bannière apparaît ; le rechargement n'est jamais automatique, pour ne pas faire perdre une saisie en cours.
 
 À noter sur iOS : le service worker sert toujours la version en cache d'abord, donc une nouvelle version n'apparaît jamais sur le premier écran mais en cours de session. Et le tout premier lancement après « Ajouter à l'écran d'accueil » doit se faire **en ligne**, le stockage d'une app installée étant isolé de celui de Safari.
 
 ## Installer sur iPhone
 
-Ouvrir le site dans Safari, puis Partager → « Sur l'écran d'accueil ». L'app se lance ensuite en plein écran, sans barre d'adresse, et fonctionne en mode avion.
+Ouvrir le site dans Safari, puis Partager → « Sur l'écran d'accueil ». L'app se lance ensuite en plein écran, sans barre d'adresseet fonctionne en mode avion.

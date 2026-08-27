@@ -14,7 +14,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     version: '1.1.0',
     date: '2026-08-27',
     changes: [
-      'Billets et pièces : photos réelles, à l’échelle, et les pièges de reconnaissance.',
+      'Billets et pièces : photos réelles, à l’échelleet les pièges de reconnaissance.',
       'Soleil et marées par île, calculés hors ligne.',
       'Carte des cinq archipels et distances.',
       'Faune marine : photos, saisons, risques et distances légales.',

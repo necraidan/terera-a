@@ -49,7 +49,7 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
         </p>
         <p class="mt-3">
           Le convertisseur repose sur la parité fixe légale du franc pacifique (1 € =
-          {{ rateLabel }} F), qui ne varie pas. Aucune donnée n’est envoyée nulle part, et l’app ne
+          {{ rateLabel }} F), qui ne varie pas. Aucune donnée n’est envoyée nulle partet l’app ne
           demande aucune autorisation.
         </p>
       </div>

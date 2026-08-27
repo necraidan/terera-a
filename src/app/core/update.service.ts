@@ -1,8 +1,8 @@
 import {
   ApplicationRef,
   DestroyRef,
-  InjectionToken,
   Injectable,
+  InjectionToken,
   inject,
   signal,
 } from '@angular/core';
@@ -11,7 +11,7 @@ import { filter } from 'rxjs/operators';
 
 /**
  * Injecté plutôt qu'appelé en dur : `location.reload` n'est pas espionnable sous
- * jsdom, et la partie la plus critique du service resterait sinon non testée.
+ * jsdomet la partie la plus critique du service resterait sinon non testée.
  */
 export const RELOAD_PAGE = new InjectionToken<() => void>('RELOAD_PAGE', {
   providedIn: 'root',
@@ -92,7 +92,7 @@ export class UpdateService {
   }
 
   /**
-   * `checkForUpdate` ne résout qu'après avoir téléchargé la version complète, et
+   * `checkForUpdate` ne résout qu'après avoir téléchargé la version complèteet
    * rejette hors ligne, cas fréquent pour une app de voyage.
    */
   async check(): Promise<CheckOutcome> {

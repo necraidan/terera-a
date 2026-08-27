@@ -114,7 +114,7 @@ async function main() {
   console.log('✓ apple-touch-icon.png');
 
   // Favicon : les navigateurs modernes préfèrent un PNG, mais /favicon.ico est
-  // encore demandé automatiquement à la racine : on écrit donc les deux, et le
+  // encore demandé automatiquement à la racine : on écrit donc les deuxet le
   // .ico est un vrai conteneur ICO, pas un PNG renommé.
   const publicDir = fileURLToPath(new URL('../public/', import.meta.url));
   const png32 = await sharp(anySvg).resize(32, 32).png().toBuffer();

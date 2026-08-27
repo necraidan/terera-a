@@ -1,7 +1,7 @@
 import { PronunciationRule } from './pronunciation.models';
 
 /**
- * Comment se prononce le tahitien, et pourquoi les graphies officielles
+ * Comment se prononce le tahitienet pourquoi les graphies officielles
  * trompent l'oeil d'un francophone.
  */
 export const PRONUNCIATION_RULES: readonly PronunciationRule[] = [
@@ -19,7 +19,7 @@ export const PRONUNCIATION_RULES: readonly PronunciationRule[] = [
   },
   {
     title: 'Le macron (tārava), voyelle longue',
-    text: "La barre placée sur une voyelle (ā, ē, ī, ō, ū) s'appelle tārava. Elle indique une voyelle tenue environ deux fois plus longtemps, et c'est elle qui attire l'accent du mot. Cette longueur est distinctive : elle peut à elle seule séparer deux mots différents. Exemples dans les noms de lieux : Pīra'e (i initial long), 'Āru'e (a initial long), Ra'iātea, Ōtemanu.",
+    text: "La barre placée sur une voyelle (ā, ē, ī, ō, ū) s'appelle tārava. Elle indique une voyelle tenue environ deux fois plus longtempset c'est elle qui attire l'accent du mot. Cette longueur est distinctive : elle peut à elle seule séparer deux mots différents. Exemples dans les noms de lieux : Pīra'e (i initial long), 'Āru'e (a initial long), Ra'iātea, Ōtemanu.",
   },
   {
     title: 'Les consonnes du tahitien',

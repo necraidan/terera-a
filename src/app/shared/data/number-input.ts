@@ -1,6 +1,6 @@
 /**
  * Lecture d'un nombre saisi au clavier français : le pavé décimal iOS produit une
- * virgule, et un résultat recopié depuis l'app contient les espaces insécables
+ * virguleet un résultat recopié depuis l'app contient les espaces insécables
  * qu'insère `Intl.NumberFormat`.
  */
 

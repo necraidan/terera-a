@@ -1,12 +1,12 @@
 import { MarineRegulation, MarineSpecies } from './wildlife.models';
 
 /**
- * La faune marine que rencontre un voyageur, et ce que la loi polynesienne
+ * La faune marine que rencontre un voyageuret ce que la loi polynesienne
  * autorise a son sujet.
  *
  * Les regles d'approche ne sont pas des conseils de politesse : la Polynesie
  * francaise est un sanctuaire des mammiferes marins depuis 2002, tous les
- * requins y sont proteges, et les infractions sont penalement sanctionnees.
+ * requins y sont protegeset les infractions sont penalement sanctionnees.
  */
 export const MARINE_SPECIES: readonly MarineSpecies[] = [
   {
@@ -47,7 +47,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
     sizeTypical: "3 à 4 m d'envergure, exceptionnellement 5 m.",
     risk: 'aucun',
     riskNote:
-      "Filtreuse de plancton, sans dard ni dents dangereuses. Le risque est à l'envers : le contact abîme le mucus qui protège sa peau, et la pression touristique fait déserter les stations de nettoyage.",
+      "Filtreuse de plancton, sans dard ni dents dangereuses. Le risque est à l'envers : le contact abîme le mucus qui protège sa peauet la pression touristique fait déserter les stations de nettoyage.",
     protection:
       "Espèce protégée. Le genre Mobula sp. est inscrit sur la liste des espèces protégées de catégorie A du code de l'environnement de la Polynésie française : destruction, mutilation, perturbation intentionnelle, capture, détention, commerce, import et export sont interdits.",
     rules: [
@@ -77,7 +77,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
       "Ne pas nourrir, ne pas attirer avec du poisson ou du pain : c'est interdit par le code de l'environnement.",
       'Ne pas toucher, ne pas saisir la queue ni les ailerons, ne pas bloquer un requin dans un cul-de-sac.',
       "Ne pas se baigner près d'un nettoyage de poisson, ni garder sur soi du poisson pêché.",
-      'Éviter la baignade de nuit et au crépuscule, dans les passes, et dans une eau chargée après de fortes pluies.',
+      'Éviter la baignade de nuit et au crépuscule, dans les passeset dans une eau chargée après de fortes pluies.',
     ],
   },
   {
@@ -121,7 +121,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
       "Rester groupé, garder l'animal en vue, ne pas s'éloigner en palmant vite en surface.",
       'Ne rien tenir dans les mains qui puisse passer pour une proie : poisson, sac brillant, objet agité.',
       "Ne pas nourrir ni provoquer d'attroupement autour du bateau.",
-      "Rester le long du récif plutôt qu'en pleine eau, et remonter le long du tombant.",
+      "Rester le long du récif plutôt qu'en pleine eauet remonter le long du tombant.",
     ],
   },
   {
@@ -199,7 +199,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
     image: 'images/wildlife/baleine-a-bosse.webp',
     photoCredit: 'Juan Cruzado Cortés, CC BY 4.0, via Wikimedia Commons',
     where:
-      "Eaux extérieures, le long des récifs barrières et des pentes, souvent visible depuis le rivage. L'approche se fait en mer avec un prestataire autorisé : Rurutu et Tubuai aux Australes, Moorea, Tahiti, Bora Bora, Huahine, Raiatea, Tahaa, Tetiaroa, et les Marquises. La recherche et l'approche sont interdites dans les lagons, les baies et les passes, ainsi que dans un rayon de 1 km centré sur l'axe d'une passe.",
+      "Eaux extérieures, le long des récifs barrières et des pentes, souvent visible depuis le rivage. L'approche se fait en mer avec un prestataire autorisé : Rurutu et Tubuai aux Australes, Moorea, Tahiti, Bora Bora, Huahine, Raiatea, Tahaa, Tetiaroaet les Marquises. La recherche et l'approche sont interdites dans les lagons, les baies et les passes, ainsi que dans un rayon de 1 km centré sur l'axe d'une passe.",
     season:
       "Hiver austral : présence de juillet à novembre, avec un pic en août, septembre et octobre. Pour la saison vérifiée, l'observation encadrée n'est autorisée que du 20 juillet au 20 novembre, de 7h30 à 17h30 ; ces bornes sont fixées par arrêté et peuvent changer d'une année sur l'autre. Les mères et leurs baleineaux sont souvent les dernières à repartir.",
     sizeTypical: '12 à 15 m pour 25 à 40 tonnes ; un baleineau naît autour de 4 à 5 m.',
@@ -211,7 +211,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
     rules: [
       'Distance minimale de 100 m pour les navires des prestataires autorisés, 300 m pour tous les autres bateaux depuis la réforme applicable au 1er décembre 2024.',
       "Trois navires au maximum dans la zone d'observation, un seul par groupe d'entreprises.",
-      "Mise à l'eau réservée aux sorties autorisées : 6 personnes maximum accompagnées d'un guide formé, jamais à moins de 15 m de l'animal, et jamais déposées sur la trajectoire de la baleine.",
+      "Mise à l'eau réservée aux sorties autorisées : 6 personnes maximum accompagnées d'un guide formé, jamais à moins de 15 m de l'animalet jamais déposées sur la trajectoire de la baleine.",
       "Vitesse limitée à 3 noeuds dans un rayon de 300 m, route parallèle et dans le même sens, aucun changement brusque de cap ou de régime moteur, moteur au point mort et non coupé si l'animal se rapproche.",
       "Ne pas encercler, ne pas séparer une mère de son baleineau, ne pas bloquer un animal contre le récif ou le rivage, ne pas s'approcher d'un jeune seul.",
       "Ne pas rester plus de 15 minutes dans la zone d'observation, moins encore en présence d'un nouveau-né.",
@@ -235,7 +235,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
     riskNote:
       "Pas de danger en soi, mais ce sont de grands prédateurs sauvages : morsures et coups sont possibles si on les touche ou si on s'impose à eux. Les groupes en repos, en particulier les dauphins à long bec en journée, sont très sensibles au dérangement.",
     protection:
-      'Toutes les espèces de dauphins, et plus généralement tous les mammifères marins, sont des espèces protégées de catégorie B, dans le sanctuaire polynésien des mammifères marins.',
+      'Toutes les espèces de dauphinset plus généralement tous les mammifères marins, sont des espèces protégées de catégorie B, dans le sanctuaire polynésien des mammifères marins.',
     rules: [
       "Distance de sécurité minimale de 30 m entre l'embarcation et un dauphin ou un globicéphale (art. A. 2213-1-7 du code de l'environnement).",
       "Ne pas poursuivre, ne pas couper la route, suivre une route parallèle dans le même sens ; si l'animal s'approche de lui-même, moteur au point mort et non coupé.",
@@ -252,19 +252,19 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
     image: 'images/wildlife/tortue-verte.webp',
     photoCredit: 'Charles J. Sharp, CC BY-SA 4.0, via Wikimedia Commons',
     where:
-      'Lagon, platiers, herbiers et patates de corail. Fréquente à Moorea, Bora Bora, Tikehau, Maupiti, et sur les sites de ponte de Tetiaroa et des atolls de Scilly (Manuae) et Bellingshausen. Rencontre en snorkeling comme en plongée.',
+      'Lagon, platiers, herbiers et patates de corail. Fréquente à Moorea, Bora Bora, Tikehau, Maupitiet sur les sites de ponte de Tetiaroa et des atolls de Scilly (Manuae) et Bellingshausen. Rencontre en snorkeling comme en plongée.',
     season:
       "Présence toute l'année. Saison de ponte de fin septembre à mars, avec un pic de décembre à février ; sur les sites suivis, l'accès aux plages est encadré à cette période.",
     sizeTypical: '80 cm à 1,10 m de carapace, 100 à 180 kg.',
     risk: 'aucun',
     riskNote:
-      'Aucun danger. Un animal acculé peut mordre, mais le problème est inverse : une tortue empêchée de remonter ne respire pas, et une femelle dérangée à terre renonce à pondre et repart en mer.',
+      'Aucun danger. Un animal acculé peut mordre, mais le problème est inverse : une tortue empêchée de remonter ne respire paset une femelle dérangée à terre renonce à pondre et repart en mer.',
     protection:
       "Espèce protégée. Les tortues marines sont protégées en Polynésie française depuis 1971, avec un renforcement en 1990, aujourd'hui repris par le code de l'environnement : la tortue verte est en catégorie B, les quatre autres espèces en catégorie A. Capture, mutilation, transport, détention, commerce, consommation, taxidermie et ramassage des oeufs sont interdits.",
     rules: [
       'Ne jamais toucher, chevaucher ni saisir la carapace, ne pas la poursuivre.',
       "Laisser toujours libre l'accès à la surface : elle doit respirer.",
-      "Rester à plusieurs mètres, sur le côté et non au-dessus, et ne pas s'interposer entre l'animal et le large.",
+      "Rester à plusieurs mètres, sur le côté et non au-dessuset ne pas s'interposer entre l'animal et le large.",
       'Sur une plage de ponte la nuit : pas de lumière blanche, pas de flash, pas de bruit, rester loin de la femelle, des traces et du nid.',
       'Ne rien ramasser, même une écaille sur un animal mort : la détention est interdite.',
     ],
@@ -288,7 +288,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
       "Espèce protégée de catégorie A en Polynésie française (liste des espèces protégées du code de l'environnement) et classée en danger critique par l'UICN au niveau mondial.",
     rules: [
       'Ne pas toucher, ne pas poursuivre, ne pas bloquer sa remontée vers la surface.',
-      'Rester sur le côté, à plusieurs mètres, et la laisser continuer son chemin.',
+      'Rester sur le côté, à plusieurs mètreset la laisser continuer son chemin.',
       'Refuser tout objet en écaille de tortue proposé à la vente : détention, achat et export sont interdits.',
     ],
   },
@@ -351,7 +351,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
     sizeTypical: '40 à 80 cm bras étendus.',
     risk: 'aucun',
     riskNote:
-      "Inoffensif pour l'homme. Il peut pincer avec son bec s'il est saisi, et son encre est sans danger. Le stress répété le fait déserter son abri.",
+      "Inoffensif pour l'homme. Il peut pincer avec son bec s'il est saisiet son encre est sans danger. Le stress répété le fait déserter son abri.",
     protection:
       'Non protégé ; la pêche est encadrée par la réglementation de la pêche lagonaire et par les rahui communaux.',
     rules: [
@@ -412,7 +412,7 @@ export const MARINE_SPECIES: readonly MarineSpecies[] = [
     image: 'images/wildlife/napoleon.webp',
     photoCredit: 'Julien Bidet for MDC Seamarc, CC BY-SA 4.0, via Wikimedia Commons',
     where:
-      'Tombants, pentes externes et abords des passes. Rencontre en plongée aux Tuamotu, notamment Fakarava et Rangiroa, et dans les îles Sous-le-Vent. Devenu rare près des îles les plus peuplées.',
+      'Tombants, pentes externes et abords des passes. Rencontre en plongée aux Tuamotu, notamment Fakarava et Rangiroaet dans les îles Sous-le-Vent. Devenu rare près des îles les plus peuplées.',
     season: "Toute l'année.",
     sizeTypical:
       "60 cm à 1,20 m couramment, jusqu'à 2 m et environ 180 kg pour les très vieux mâles.",
@@ -441,11 +441,11 @@ export const MARINE_REGULATIONS: readonly MarineRegulation[] = [
   },
   {
     title: "Distances d'approche des mammifères marins",
-    text: "Le code de l'environnement (art. A. 2213-1-7) fixe une distance de sécurité minimale de 100 m entre une embarcation et une baleine, et de 30 m pour les dauphins et les autres mammifères marins, sauf si l'animal réduit lui-même la distance : dans ce cas le moteur est mis au point mort, sans être coupé. Depuis la réforme applicable au 1er décembre 2024, seuls les prestataires autorisés, dont les capitaines et les guides sont formés, peuvent approcher une baleine à 100 m ; tous les autres navires, plaisanciers compris, doivent rester à 300 m. Les nageurs et plongeurs approchent latéralement, la mise à l'eau étant interdite à moins de 15 m de l'animal.",
+    text: "Le code de l'environnement (art. A. 2213-1-7) fixe une distance de sécurité minimale de 100 m entre une embarcation et une baleineet de 30 m pour les dauphins et les autres mammifères marins, sauf si l'animal réduit lui-même la distance : dans ce cas le moteur est mis au point mort, sans être coupé. Depuis la réforme applicable au 1er décembre 2024, seuls les prestataires autorisés, dont les capitaines et les guides sont formés, peuvent approcher une baleine à 100 m ; tous les autres navires, plaisanciers compris, doivent rester à 300 m. Les nageurs et plongeurs approchent latéralement, la mise à l'eau étant interdite à moins de 15 m de l'animal.",
   },
   {
     title: "Mise à l'eau et nage avec les baleines",
-    text: "La nage avec les baleines n'est pas interdite en soi, mais elle est réservée en pratique aux sorties d'un prestataire autorisé : 6 personnes maximum à l'eau, accompagnées d'un guide formé, jamais à moins de 15 m de l'animal, et il est interdit de déposer les nageurs sur la trajectoire de la baleine. Un particulier, tenu de rester à 300 m, ne peut pas se mettre à l'eau avec une baleine.",
+    text: "La nage avec les baleines n'est pas interdite en soi, mais elle est réservée en pratique aux sorties d'un prestataire autorisé : 6 personnes maximum à l'eau, accompagnées d'un guide formé, jamais à moins de 15 m de l'animalet il est interdit de déposer les nageurs sur la trajectoire de la baleine. Un particulier, tenu de rester à 300 m, ne peut pas se mettre à l'eau avec une baleine.",
   },
   {
     title: "Manoeuvres, vitesse et durée d'observation",
@@ -461,7 +461,7 @@ export const MARINE_REGULATIONS: readonly MarineRegulation[] = [
   },
   {
     title: 'Nourrissage des requins et des raies : interdit',
-    text: "Le nourrissage de la faune sauvage est interdit par le code de l'environnement : l'article LP. 2200-1 prohibe le fait d'attirer à soi de quelque manière que ce soit des espèces sauvages, notamment par des gestes, des bruits ou des promesses de nourriture, lorsque la pratique gêne les autres usagers ou attire des prédateurs. Cette interdiction, en place depuis la loi du pays n° 2017-25 du 5 octobre 2017 relative au code de l'environnement, met fin au shark feeding : une activité d'observation de requins préalablement attirés par de la nourriture n'est pas autorisée. Le nourrissage des raies pastenagues tombe sous la même règle, et le plan de gestion de l'espace maritime de Moorea de 2021 a aligné ses dispositions sur le code. L'infraction est punie de l'amende prévue pour les contraventions de 3e classe, doublée en cas de récidive ou dans un espace naturel classé. Dans les faits, la pratique persiste chez certains prestataires : le voyageur peut refuser d'y participer.",
+    text: "Le nourrissage de la faune sauvage est interdit par le code de l'environnement : l'article LP. 2200-1 prohibe le fait d'attirer à soi de quelque manière que ce soit des espèces sauvages, notamment par des gestes, des bruits ou des promesses de nourriture, lorsque la pratique gêne les autres usagers ou attire des prédateurs. Cette interdiction, en place depuis la loi du pays n° 2017-25 du 5 octobre 2017 relative au code de l'environnement, met fin au shark feeding : une activité d'observation de requins préalablement attirés par de la nourriture n'est pas autorisée. Le nourrissage des raies pastenagues tombe sous la même règleet le plan de gestion de l'espace maritime de Moorea de 2021 a aligné ses dispositions sur le code. L'infraction est punie de l'amende prévue pour les contraventions de 3e classe, doublée en cas de récidive ou dans un espace naturel classé. Dans les faits, la pratique persiste chez certains prestataires : le voyageur peut refuser d'y participer.",
   },
   {
     title: 'Tous les requins sont protégés',
@@ -469,7 +469,7 @@ export const MARINE_REGULATIONS: readonly MarineRegulation[] = [
   },
   {
     title: 'Tortues marines : protection ancienne et stricte',
-    text: "Les cinq espèces de tortues marines connues en Polynésie française sont protégées : tortue verte (catégorie B), tortue imbriquée, caouanne, luth et olivâtre (catégorie A). La protection remonte à 1971, a été renforcée en 1990, et figure aujourd'hui dans le code de l'environnement. Sont interdits la destruction, la mutilation, la perturbation intentionnelle, la capture, le transport, la détention, l'utilisation, la commercialisation ou l'achat, l'importation et l'exportation de tout ou partie de l'animal, carapace, écailles et chair comprises, ainsi que le ramassage des oeufs et la taxidermie.",
+    text: "Les cinq espèces de tortues marines connues en Polynésie française sont protégées : tortue verte (catégorie B), tortue imbriquée, caouanne, luth et olivâtre (catégorie A). La protection remonte à 1971, a été renforcée en 1990et figure aujourd'hui dans le code de l'environnement. Sont interdits la destruction, la mutilation, la perturbation intentionnelle, la capture, le transport, la détention, l'utilisation, la commercialisation ou l'achat, l'importation et l'exportation de tout ou partie de l'animal, carapace, écailles et chair comprises, ainsi que le ramassage des oeufs et la taxidermie.",
   },
   {
     title: 'Sanctions',
@@ -477,7 +477,7 @@ export const MARINE_REGULATIONS: readonly MarineRegulation[] = [
   },
   {
     title: "Images d'espèces protégées",
-    text: "Le code encadre aussi les prises de vue et de son : pour les espèces protégées, la prise de vue figure parmi les actes soumis à autorisation, et l'article LP. 2213-2 interdit de céder ou d'utiliser, y compris sur des supports numériques, des images obtenues sans l'autorisation requise ou en violation des conditions d'approche. En pratique, l'enjeu porte sur l'usage professionnel et commercial des images de baleines, de dauphins et d'autres espèces protégées, pour lequel la mention de l'autorisation est obligatoire. En cas de doute sur un projet de tournage ou de publication, il faut interroger la direction de l'environnement.",
+    text: "Le code encadre aussi les prises de vue et de son : pour les espèces protégées, la prise de vue figure parmi les actes soumis à autorisationet l'article LP. 2213-2 interdit de céder ou d'utiliser, y compris sur des supports numériques, des images obtenues sans l'autorisation requise ou en violation des conditions d'approche. En pratique, l'enjeu porte sur l'usage professionnel et commercial des images de baleines, de dauphins et d'autres espèces protégées, pour lequel la mention de l'autorisation est obligatoire. En cas de doute sur un projet de tournage ou de publication, il faut interroger la direction de l'environnement.",
   },
   {
     title: "À qui s'adresser",

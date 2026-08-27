@@ -4,7 +4,7 @@ import { LexiconEntry } from './lexicon.models';
  * Lexique de reo tahiti pour un voyageur francophone.
  *
  * La colonne « prononciation » est une approximation volontairement simple : le
- * tahitien se prononce presque comme il s'écrit, chaque voyelle se détache, et
+ * tahitien se prononce presque comme il s'écrit, chaque voyelle se détacheet
  * l'apostrophe (’eta) marque un léger coup de glotte. Les macrons (ā, ē, ī, ō, ū)
  * allongent la voyelle.
  */
@@ -652,7 +652,7 @@ export const LEXICON: readonly LexiconEntry[] = [
     ty: 'Tahiti',
     pron: 'ta-hi-ti',
     category: 'toponymes',
-    note: "Ni eta ni macron. Le h est soufflé et s'entend, et le groupe ti ne devient jamais tsi.",
+    note: "Ni eta ni macron. Le h est soufflé et s'entendet le groupe ti ne devient jamais tsi.",
   },
   {
     id: 'lieu-moorea',
@@ -948,7 +948,7 @@ export const LEXICON: readonly LexiconEntry[] = [
     ty: "Ua Pou (aussi écrit 'Ua Pou)",
     pron: 'ou-a po-ou',
     category: 'toponymes',
-    note: "Piège net : Pou n'est pas le mot français pou. On dit po-ou, en deux temps, et Ua fait ou-a.",
+    note: "Piège net : Pou n'est pas le mot français pou. On dit po-ou, en deux tempset Ua fait ou-a.",
   },
   {
     id: 'lieu-ua-huka',

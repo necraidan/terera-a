@@ -1,7 +1,7 @@
 import { Banknote, Coin, ImageCredit } from './money.models';
 
 /**
- * Les espèces en franc pacifique : quatre billets, six pièces, et rien d'autre.
+ * Les espèces en franc pacifique : quatre billets, six pièceset rien d'autre.
  *
  * Billets de la gamme 2014, mise en circulation le 20 janvier 2014. Pièces de la
  * gamme 2021, mise en circulation le 1er septembre 2021. Les anciennes séries
@@ -27,7 +27,7 @@ export const BANKNOTES: readonly Banknote[] = [
     widthMm: 120,
     heightMm: 66,
     buys: 'Un café ou une boisson fraîche, un casse-croûte, un trajet de truck. La coupure de tous les jours.',
-    recognition: 'Le plus petit billet, et le seul vert de la gamme.',
+    recognition: 'Le plus petit billetet le seul vert de la gamme.',
     imageRecto: 'images/money/note-500-recto.webp',
     imageVerso: 'images/money/note-500-verso.webp',
   },

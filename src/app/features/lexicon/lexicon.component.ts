@@ -22,7 +22,7 @@ interface Section {
 
 /**
  * Retire accents et macrons pour la recherche : taper « mauruuru » doit trouver
- * « Māuruuru », et « a table » doit trouver « À table ».
+ * « Māuruuru »et « a table » doit trouver « À table ».
  */
 function fold(value: string): string {
   return value

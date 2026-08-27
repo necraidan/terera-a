@@ -1,7 +1,7 @@
 export interface UsefulLink {
   readonly title: string;
   readonly url: string;
-  /** À quoi le lien sert, et à quel moment du voyage. */
+  /** À quoi le lien sertet à quel moment du voyage. */
   readonly purpose: string;
   /** Vrai pour les liens qu'il vaut mieux avoir consultés avant de partir. */
   readonly essential: boolean;
