@@ -1,16 +1,14 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { UpdateBannerComponent } from './shared/ui/update-banner.component';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'ta-root',
-  styles: [],
+  imports: [RouterOutlet, UpdateBannerComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <h1>Hello, {{ title() }}</h1>
-
     <router-outlet />
+    <ta-update-banner />
   `,
 })
-export class App {
-  protected readonly title = signal('terera-a');
-}
+export class App {}
