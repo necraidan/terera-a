@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 /** Tuile de la grille d'accueil : emoji, nom de l'outil, courte accroche. */
 @Component({
   selector: 'ta-tool-card',
   imports: [RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host {
       display: block;

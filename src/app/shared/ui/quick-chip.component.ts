@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 /** Petit bouton pilule : montants rapides du convertisseur, filtres du lexique. */
 @Component({
   selector: 'ta-quick-chip',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <button
       type="button"

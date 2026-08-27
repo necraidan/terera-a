@@ -1,20 +1,21 @@
 import { Injectable, computed, signal } from '@angular/core';
-
-const STORAGE_KEY = 'tereraa:lexicon:favorites';
+import { readStored, writeStored } from './storage';
 
 /**
- * Mots du lexique mis de côté par l'utilisateur.
+ * Ensemble d'identifiants mis de côté par l'utilisateur, persisté localement.
  *
- * Persisté dans `localStorage`, avec tous les accès gardés : en navigation
- * privée Safari l'écriture lève, et la fonctionnalité doit alors se dégrader
- * silencieusement plutôt que casser l'écran.
+ * Le lexique et les liens utiles ont le même besoin, avec des clés de stockage
+ * distinctes : la logique vit donc ici une seule fois.
  */
-@Injectable({ providedIn: 'root' })
-export class FavoritesStore {
-  readonly #ids = signal<ReadonlySet<string>>(read());
+export class FavoritesSet {
+  readonly #ids = signal<ReadonlySet<string>>(new Set());
 
   readonly ids = this.#ids.asReadonly();
   readonly count = computed(() => this.#ids().size);
+
+  constructor(private readonly storageKey: string) {
+    this.#ids.set(read(storageKey));
+  }
 
   has(id: string): boolean {
     return this.#ids().has(id);
@@ -26,27 +27,35 @@ export class FavoritesStore {
       next.add(id);
     }
     this.#ids.set(next);
-    write(next);
+    writeStored(this.storageKey, JSON.stringify([...next]));
   }
 }
 
-function read(): ReadonlySet<string> {
+/** Mots du lexique mis de côté. */
+@Injectable({ providedIn: 'root' })
+export class FavoritesStore extends FavoritesSet {
+  constructor() {
+    super('lexicon:favorites');
+  }
+}
+
+/** Liens utiles mis de côté, remontés en tête de la page Liens. */
+@Injectable({ providedIn: 'root' })
+export class LinkFavoritesStore extends FavoritesSet {
+  constructor() {
+    super('links:favorites');
+  }
+}
+
+function read(key: string): ReadonlySet<string> {
+  const raw = readStored(key);
+  if (raw === null) {
+    return new Set();
+  }
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw === null) {
-      return new Set();
-    }
     const parsed: unknown = JSON.parse(raw);
     return new Set(Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : []);
   } catch {
     return new Set();
-  }
-}
-
-function write(ids: ReadonlySet<string>): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...ids]));
-  } catch {
-    // Stockage indisponible : les favoris ne survivront pas à la session.
   }
 }

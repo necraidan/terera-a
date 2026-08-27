@@ -1,37 +1,14 @@
+import { parseDecimalInput } from './number-input';
+
 /**
- * Le franc pacifique est arrimé à l'euro par une parité fixe fixée par décret :
- * 1 000 XPF = 8,38 EUR, soit 1 EUR = 119,331 742 XPF exactement.
- *
- * Ce n'est pas un taux de marché : il ne bouge pas. L'app n'a donc aucune API de
- * change à interroger, ce qui est précisément ce qui la rend utilisable sur un
- * motu sans réseau.
+ * Parité fixe légale, pas un taux de marché : 1 000 XPF = 8,38 EUR exactement.
+ * C'est ce qui dispense l'app de toute API de change.
  */
 export const XPF_PER_EUR = 119.331742;
 
-/**
- * Espaces à ignorer dans une saisie ou un résultat recopié : l'espace ordinaire,
- * l'insécable (U+00A0) et la fine insécable (U+202F), ces deux dernières étant
- * les séparateurs de milliers que produit `Intl.NumberFormat` en français.
- */
-const GROUPING_SPACES = /[\s\u00a0\u202f]/g;
-
-/**
- * Interprète une saisie utilisateur en nombre.
- *
- * Le pavé décimal iOS en français produit une virgule : on accepte les deux
- * séparateurs décimaux.
- *
- * @returns Le montant, ou `null` si la saisie n'est pas un nombre exploitable.
- */
+/** Un montant est toujours positif : les valeurs négatives sont rejetées. */
 export function parseAmount(raw: string): number | null {
-  const cleaned = raw.replace(GROUPING_SPACES, '').replace(',', '.');
-
-  if (cleaned === '') {
-    return null;
-  }
-
-  const value = Number(cleaned);
-  return Number.isFinite(value) && value >= 0 ? value : null;
+  return parseDecimalInput(raw);
 }
 
 /** Convertit des euros en francs pacifique (arrondi au franc : pas de centime). */
@@ -55,7 +32,7 @@ const eurFormatter = new Intl.NumberFormat('fr-FR', {
   maximumFractionDigits: 2,
 });
 
-/** Ex. `12 500 F` — le franc pacifique n'a pas de subdivision en circulation. */
+/** Ex. `12 500 F`. Le franc pacifique n'a pas de subdivision. */
 export function formatXpf(xpf: number): string {
   return `${xpfFormatter.format(xpf)} F`;
 }

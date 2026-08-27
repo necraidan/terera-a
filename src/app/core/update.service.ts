@@ -1,35 +1,45 @@
-import { ApplicationRef, DestroyRef, Injectable, inject, signal } from '@angular/core';
+import {
+  ApplicationRef,
+  DestroyRef,
+  InjectionToken,
+  Injectable,
+  inject,
+  signal,
+} from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
 
-/** Résultat d'une vérification manuelle, pour piloter le retour visuel. */
+/**
+ * Injecté plutôt qu'appelé en dur : `location.reload` n'est pas espionnable sous
+ * jsdom, et la partie la plus critique du service resterait sinon non testée.
+ */
+export const RELOAD_PAGE = new InjectionToken<() => void>('RELOAD_PAGE', {
+  providedIn: 'root',
+  factory: () => () => document.location.reload(),
+});
+
 export type CheckOutcome = 'ready' | 'up-to-date' | 'error' | 'disabled';
 
-/** Intervalle des vérifications automatiques quand l'app est au premier plan. */
 const CHECK_INTERVAL_MS = 30 * 60 * 1000;
 
-/** Un retour au premier plan ne redéclenche pas de vérification avant ce délai. */
+/** Anti-rebond : un retour au premier plan ne revérifie pas avant ce délai. */
 const FOREGROUND_THROTTLE_MS = 60 * 1000;
 
 /**
- * Détection et application des mises à jour de la PWA.
- *
- * Le service worker sert toujours la version en cache d'abord (offline-first) :
- * une nouvelle version n'est donc jamais visible au premier écran. Elle est
- * détectée en tâche de fond, puis signalée par `updateAvailable` — c'est
- * l'utilisateur qui décide de recharger, jamais nous (un reload automatique
- * ferait perdre une saisie en cours).
+ * Le service worker sert d'abord le cache : une nouvelle version n'apparaît donc
+ * jamais au premier écran, mais en cours de session. C'est l'utilisateur qui
+ * décide de recharger, jamais nous, sous peine de lui faire perdre une saisie.
  */
 @Injectable({ providedIn: 'root' })
 export class UpdateService {
   private readonly swUpdate = inject(SwUpdate);
   private readonly appRef = inject(ApplicationRef);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly reloadPage = inject(RELOAD_PAGE);
 
   /** Une nouvelle version est téléchargée et prête à être activée. */
   readonly updateAvailable = signal(false);
 
-  /** Une vérification est en cours (le téléchargement peut prendre du temps). */
   readonly checking = signal(false);
 
   readonly lastCheckedAt = signal<Date | null>(null);
@@ -51,10 +61,8 @@ export class UpdateService {
 
     // Le cache du service worker est corrompu ou incomplet (iOS peut purger sous
     // pression de stockage) : seul un rechargement complet répare l'installation.
-    this.swUpdate.unrecoverable.subscribe(() => document.location.reload());
+    this.swUpdate.unrecoverable.subscribe(() => this.reloadPage());
 
-    // Première vérification une fois l'app stable — le service worker
-    // s'enregistre lui-même via `registerWhenStable`, inutile de le devancer.
     void this.appRef.whenStable().then(() => void this.check());
 
     const interval = setInterval(() => void this.check(), CHECK_INTERVAL_MS);
@@ -84,18 +92,14 @@ export class UpdateService {
   }
 
   /**
-   * Interroge le serveur : une nouvelle version existe-t-elle ?
-   *
-   * `checkForUpdate()` ne résout qu'après avoir téléchargé la version complète,
-   * et rejette hors ligne — cas fréquent pour une app de voyage.
+   * `checkForUpdate` ne résout qu'après avoir téléchargé la version complète, et
+   * rejette hors ligne, cas fréquent pour une app de voyage.
    */
   async check(): Promise<CheckOutcome> {
     if (!this.swUpdate.isEnabled) {
       return 'disabled';
     }
 
-    // Les vérifications automatiques sont nombreuses (retour au premier plan à
-    // chaque déverrouillage) : on évite de marteler le réseau.
     const now = Date.now();
     if (this.checking() || now - this.#lastCheckAt < FOREGROUND_THROTTLE_MS) {
       return this.updateAvailable() ? 'ready' : 'up-to-date';
@@ -119,18 +123,16 @@ export class UpdateService {
     }
   }
 
-  /**
-   * Force une vérification en ignorant l'anti-rebond : utilisé par le bouton
-   * « Vérifier les mises à jour », où l'utilisateur attend une réponse.
-   */
+  /** Ignore l'anti-rebond : l'utilisateur a cliqué et attend une réponse. */
   checkNow(): Promise<CheckOutcome> {
     this.#lastCheckAt = 0;
     return this.check();
   }
 
   /**
-   * Bascule sur la nouvelle version. Le rechargement suffit — le service worker
-   * sert la dernière version prête à la prochaine navigation — mais on active
+   * Bascule sur la nouvelle version. Le rechargement suffit à lui seul, car le
+   * service worker sert la dernière version prête à la prochaine navigation,
+   * mais on active
    * explicitement d'abord pour ne pas dépendre de ce détail d'implémentation.
    */
   async applyUpdate(): Promise<void> {
@@ -139,6 +141,6 @@ export class UpdateService {
     } catch {
       // Rien à faire : le rechargement ci-dessous répare de toute façon l'état.
     }
-    document.location.reload();
+    this.reloadPage();
   }
 }

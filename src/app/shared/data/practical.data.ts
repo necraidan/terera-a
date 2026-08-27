@@ -55,7 +55,7 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
         items: [
           'Le wifi est courant dans les hôtels et pensions, souvent lent.',
           'La 4G couvre bien Tahiti et Moorea, plus inégalement les Tuamotu et les Marquises.',
-          'Sur un motu ou en excursion, prévoyez de n’avoir aucun réseau — d’où cette app hors ligne.',
+          'Sur un motu ou en excursion, prévoyez de n’avoir aucun réseau : d’où cette app hors ligne.',
         ],
       },
     ],
@@ -64,14 +64,14 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
     id: 'electricite',
     title: 'Électricité',
     icon: '🔌',
-    summary: '220 V, prises françaises — aucun adaptateur',
+    summary: '220 V, prises françaises, aucun adaptateur',
     sections: [
       {
         kind: 'facts',
         items: [
           { label: 'Tension', value: '220 V' },
           { label: 'Fréquence', value: '60 Hz (50 Hz dans certaines îles)' },
-          { label: 'Prises', value: 'Types C et E — identiques à la métropole' },
+          { label: 'Prises', value: 'Types C et E, identiques à la métropole' },
         ],
       },
       {
@@ -102,7 +102,7 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
         items: [
           'On se salue volontiers, même entre inconnus : un « Ia ora na » ouvre beaucoup de portes.',
           'Le maillot de bain reste sur la plage : en ville et dans les commerces, on se couvre.',
-          'Le monoï et les crèmes solaires classiques abîment le corail — préférez une protection minérale « reef safe ».',
+          'Le monoï et les crèmes solaires classiques abîment le corail : préférez une protection minérale « reef safe ».',
           'Retirez vos chaussures avant d’entrer chez quelqu’un.',
           'Le rythme est tranquille : beaucoup de commerces ferment tôt, et le dimanche est très calme.',
           'Demandez avant de photographier une personne, une cérémonie ou un marae (site sacré).',
@@ -110,7 +110,7 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
       },
       {
         kind: 'paragraph',
-        text: 'Fleur à l’oreille : à droite pour signaler qu’on est en couple, à gauche que l’on est disponible — un usage souvent taquiné, jamais obligatoire.',
+        text: 'Fleur à l’oreille : à droite pour signaler qu’on est en couple, à gauche que l’on est disponible. Un usage souvent taquiné, jamais obligatoire.',
       },
     ],
   },
@@ -127,12 +127,16 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
           { label: 'Taux fixe légal', value: '1 € = 119,331742 F' },
           { label: 'Repère de calcul', value: '1 000 F ≈ 8,38 €' },
           { label: 'Billets', value: '500, 1 000, 5 000 et 10 000 F' },
-          { label: 'Pièces', value: '1, 2, 5, 10, 20, 50 et 100 F' },
+          { label: 'Pièces', value: '5, 10, 20, 50, 100 et 200 F' },
         ],
       },
       {
         kind: 'paragraph',
         text: 'Le taux est fixé par la loi et ne varie pas : le convertisseur de cette app est donc exact en permanence, sans connexion.',
+      },
+      {
+        kind: 'paragraph',
+        text: 'Les pièces de 1 et 2 F ont disparu avec la série 2021 : les totaux sont arrondis au multiple de 5 le plus proche. L’outil « Billets et pièces » détaille chaque coupure et les pièges de reconnaissance.',
       },
       {
         kind: 'list',
@@ -168,7 +172,7 @@ export const PRACTICAL_SHEETS: readonly PracticalSheet[] = [
         items: [
           { label: 'Fêtes françaises', value: 'Les jours fériés nationaux s’appliquent' },
           { label: '5 mars', value: 'Arrivée de l’Évangile' },
-          { label: 'Juillet', value: 'Heiva i Tahiti — grand festival de danse et de chant' },
+          { label: 'Juillet', value: 'Heiva i Tahiti, grand festival de danse et de chant' },
           { label: '29 juin', value: 'Fête de l’autonomie' },
         ],
       },

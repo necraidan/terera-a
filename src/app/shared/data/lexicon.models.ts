@@ -1,8 +1,15 @@
 export type LexiconCategory =
-  'salutations' | 'politesse' | 'essentiels' | 'nombres' | 'restaurant' | 'nature' | 'urgence';
+  | 'salutations'
+  | 'politesse'
+  | 'essentiels'
+  | 'nombres'
+  | 'restaurant'
+  | 'nature'
+  | 'urgence'
+  | 'toponymes';
 
 export interface LexiconEntry {
-  /** Identifiant stable, sert de clé aux favoris — ne jamais le renommer. */
+  /** Identifiant stable, sert de clé aux favoris, ne jamais le renommer. */
   readonly id: string;
   /** Le français. */
   readonly fr: string;
@@ -11,6 +18,8 @@ export interface LexiconEntry {
   /** Prononciation approchée pour un francophone. */
   readonly pron: string;
   readonly category: LexiconCategory;
+  /** Piege de prononciation ou precision, affichee sous l'entree. */
+  readonly note?: string;
 }
 
 export const CATEGORY_LABELS: Readonly<Record<LexiconCategory, string>> = {
@@ -21,6 +30,7 @@ export const CATEGORY_LABELS: Readonly<Record<LexiconCategory, string>> = {
   restaurant: 'À table',
   nature: 'Mer et nature',
   urgence: 'En cas de souci',
+  toponymes: 'Noms de lieux',
 };
 
 /** Ordre d'affichage des sections : du plus utile au plus circonstanciel. */
@@ -31,5 +41,6 @@ export const CATEGORY_ORDER: readonly LexiconCategory[] = [
   'restaurant',
   'nature',
   'nombres',
+  'toponymes',
   'urgence',
 ];

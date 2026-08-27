@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-/* Design tokens — « Terera'a » : palette lagon, light-first.
+/* Design tokens de « Terera'a » : palette lagon, light-first.
    L'app est utilisée en plein soleil (plage, bateau, marché) : le mode clair
    est le cas nominal, le mode sombre suit la préférence système. */
 @theme {
@@ -14,9 +14,11 @@
   --color-coral: #e2604f; /* corail */
   --color-danger: #c62828;
 
-  /* Pile système : SF Pro sur iPhone. Aucun webfont à télécharger, donc rien
-     à mettre en cache et un rendu identique aux apps natives. */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, ui-sans-serif, sans-serif;
+  /* Inter est auto-hébergée (public/fonts/) et precachée par le service worker :
+     le rendu est identique hors ligne et sur tous les appareils. La pile système
+     reste en repli, donc l'app s'affiche correctement même si la police échoue. */
+  --font-sans:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, ui-sans-serif, sans-serif;
 
   --radius-card: 16px;
 }
@@ -33,6 +35,41 @@
     --color-coral: #ff8a7a;
     --color-danger: #f87171;
   }
+}
+
+/* Police auto-hébergée : indispensable pour un mode offline réel.
+
+   Pas de <link rel="preload"> dans index.html : Angular inline le CSS critique
+   dans le <head>, donc cette règle est découverte immédiatement. Le preload ne
+   s'apparie pas à la requête émise par le CSS et provoquait un second
+   téléchargement complet de la police (52 ko au lieu de 26). */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Gabarits de page. La regle est simple : on lit et on saisit dans une colonne
+   etroite (au dela de 75 caracteres une ligne devient penible a suivre), on
+   parcourt dans une grille large. Definis ici pour que la decision ne soit pas
+   dispersee dans treize composants. */
+@utility page-narrow {
+  margin-inline: auto;
+  max-width: 34rem;
+  padding-inline: 1rem;
+}
+
+@utility page-wide {
+  margin-inline: auto;
+  max-width: 88rem;
+  padding-inline: 1rem;
+}
+
+@utility page-prose {
+  margin-inline: auto;
+  max-width: 42rem;
+  padding-inline: 1rem;
 }
 
 @layer base {

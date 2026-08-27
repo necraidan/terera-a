@@ -1,15 +1,8 @@
 /**
- * Génère toutes les icônes de la PWA depuis une source SVG définie ici même.
- *
- * Pas de binaire source à versionner : l'icône est décrite en SVG, donc
- * modifiable et reproductible (`pnpm make:icons`).
- *
- * Trois familles sont produites dans public/icons/ :
- *  - icon-NxN.png       : icône « any », le motif occupe presque tout le carré ;
- *  - maskable-NxN.png   : icône « maskable », motif réduit dans la zone sûre
- *                         (80 % centraux) pour survivre au rognage Android ;
- *  - apple-touch-icon.png : 180×180, aplati sur fond opaque — iOS n'applique pas
- *                         de fond derrière la transparence et affiche du noir.
+ * Génère les icônes de la PWA depuis le SVG défini ici même, donc sans binaire
+ * source à versionner. Trois familles : « any », « maskable » (motif réduit dans
+ * la zone sûre pour survivre au rognage Android) et apple-touch-icon, aplati sur
+ * fond opaque car iOS affiche du noir derrière la transparence.
  */
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -23,21 +16,58 @@ const APPLE_TOUCH_SIZE = 180;
 const LAGOON_LIGHT = '#2dd4bf';
 const LAGOON_DARK = '#0b6b7a';
 const PETAL = '#fdfbf5';
-const HEART = '#f2c14e';
+const PETAL_SHADE = '#e2dcc8';
+const HEART = '#f7e9bb';
+
+const PETAL_COUNT = 6;
+const PETAL_STEP = 360 / PETAL_COUNT;
+
+// Un pétale dans un repère local centré sur le cœur, pointe vers le haut :
+// large, bout bien arrondi, incliné vers la droite pour l'effet d'hélice
+// caractéristique de la tiaré (Gardenia taitensis).
+const PETAL_PATH = [
+  'M -6 -22',
+  'C -68 -70 -60 -160 8 -202', // bord gauche, convexe, monte vers la pointe
+  'C 34 -230 88 -216 98 -180', // bout large et arrondi
+  'C 106 -115 72 -52 22 -16', // bord droit, concave, revient vers le cœur
+  'C 12 -10 0 -14 -6 -22', // fermeture douce à la base
+  'Z',
+].join(' ');
 
 /**
- * Fleur de tiaré stylisée : six pétales en gouttes autour d'un cœur.
+ * Fleur de tiaré : six pétales en hélice autour d'un petit cœur crème.
  *
- * @param {number} scale Fraction du canevas 512 occupée par la fleur (0–1).
+ * Chaque pétale est précédé de son ombre de chevauchement, le même tracé pivoté
+ * de quelques degrés vers le pétale précédent et découpé dans celui-ci, afin
+ * que l'ombre n'apparaisse jamais sur le fond. Le pétale 0 est redessiné en
+ * dernier pour fermer la spirale.
+ *
+ * @param {number} scale Fraction du canevas 512 occupée par la fleur (0 à 1).
  * @returns {string} Le SVG complet, canevas 512×512.
  */
 function buildSvg(scale) {
-  const petals = Array.from({ length: 6 }, (_, i) => {
-    const angle = i * 60;
-    // Pétale dessiné vers le haut depuis le centre, puis pivoté autour de lui.
-    return `<path d="M 256 256 C 212 196, 216 118, 256 76 C 296 118, 300 196, 256 256 Z"
-        transform="rotate(${angle} 256 256)" fill="${PETAL}" />`;
-  }).join('\n      ');
+  let clips = '';
+  for (let i = 0; i < PETAL_COUNT; i += 1) {
+    clips +=
+      `<clipPath id="petal-${i}">` +
+      `<path d="${PETAL_PATH}" transform="rotate(${i * PETAL_STEP})" />` +
+      `</clipPath>`;
+  }
+
+  const petal = (i) => {
+    const angle = i * PETAL_STEP;
+    const previous = (i + PETAL_COUNT - 1) % PETAL_COUNT;
+    return (
+      `<g clip-path="url(#petal-${previous})">` +
+      `<path d="${PETAL_PATH}" fill="${PETAL_SHADE}" transform="rotate(${angle - 8})" />` +
+      `</g>` +
+      `<path d="${PETAL_PATH}" fill="${PETAL}" transform="rotate(${angle})" />`
+    );
+  };
+
+  let petals = '';
+  for (let i = 0; i < PETAL_COUNT; i += 1) petals += petal(i);
+  petals += petal(0);
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <defs>
@@ -48,8 +78,11 @@ function buildSvg(scale) {
   </defs>
   <rect width="512" height="512" fill="url(#lagoon)" />
   <g transform="translate(256 256) scale(${scale}) translate(-256 -256)">
+    <g transform="translate(256 256)">
+      ${clips}
       ${petals}
-    <circle cx="256" cy="256" r="46" fill="${HEART}" />
+      <circle cx="0" cy="0" r="28" fill="${HEART}" />
+    </g>
   </g>
 </svg>`;
 }
@@ -57,9 +90,7 @@ function buildSvg(scale) {
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
 
-  // « any » : la fleur remplit largement le carré.
   const anySvg = Buffer.from(buildSvg(0.92));
-  // « maskable » : réduite à la zone sûre, le rognage ne coupe aucun pétale.
   const maskableSvg = Buffer.from(buildSvg(0.62));
 
   for (const size of SIZES) {
@@ -82,11 +113,40 @@ async function main() {
     .toFile(`${OUT_DIR}apple-touch-icon.png`);
   console.log('✓ apple-touch-icon.png');
 
-  // Favicon : un PNG 32×32 suffit aux navigateurs modernes, mais on garde le
-  // .ico historique pour les vieux agents — on écrit donc les deux.
-  const favicon = fileURLToPath(new URL('../public/favicon.ico', import.meta.url));
-  await writeFile(favicon, await sharp(anySvg).resize(32, 32).png().toBuffer());
+  // Favicon : les navigateurs modernes préfèrent un PNG, mais /favicon.ico est
+  // encore demandé automatiquement à la racine : on écrit donc les deux, et le
+  // .ico est un vrai conteneur ICO, pas un PNG renommé.
+  const publicDir = fileURLToPath(new URL('../public/', import.meta.url));
+  const png32 = await sharp(anySvg).resize(32, 32).png().toBuffer();
+  await writeFile(`${publicDir}favicon-32x32.png`, png32);
+  console.log('✓ favicon-32x32.png');
+
+  await writeFile(`${publicDir}favicon.ico`, buildIco(png32, 32));
   console.log('✓ favicon.ico');
+}
+
+/**
+ * Emballe un PNG dans un conteneur ICO : le format accepte un PNG tel quel,
+ * préfixé d'un en-tête ICONDIR et d'une entrée de répertoire. Évite une
+ * dépendance de plus.
+ */
+function buildIco(png, size) {
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // réservé
+  header.writeUInt16LE(1, 2); // type 1 = icône
+  header.writeUInt16LE(1, 4); // une seule image
+
+  const entry = Buffer.alloc(16);
+  entry.writeUInt8(size === 256 ? 0 : size, 0); // largeur (0 signifie 256)
+  entry.writeUInt8(size === 256 ? 0 : size, 1); // hauteur
+  entry.writeUInt8(0, 2); // palette : sans objet en PNG
+  entry.writeUInt8(0, 3); // réservé
+  entry.writeUInt16LE(1, 4); // plans de couleur
+  entry.writeUInt16LE(32, 6); // bits par pixel
+  entry.writeUInt32LE(png.length, 8);
+  entry.writeUInt32LE(header.length + entry.length, 12); // décalage des données
+
+  return Buffer.concat([header, entry, png]);
 }
 
 main().catch((error) => {

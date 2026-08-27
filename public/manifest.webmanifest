@@ -1,7 +1,7 @@
 {
-  "name": "Terera'a — boîte à outils Polynésie",
+  "name": "Terera'a, boîte à outils Polynésie",
   "short_name": "Terera'a",
-  "description": "Convertisseur XPF, heure de Tahiti, lexique tahitien et infos pratiques — hors ligne.",
+  "description": "Convertisseur XPF, heure de Tahiti, lexique tahitien et infos pratiques, hors ligne.",
   "lang": "fr",
   "dir": "ltr",
   "display": "standalone",

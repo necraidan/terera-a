@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { FavoritesStore } from '../../shared/data/favorites.store';
 import { LEXICON } from '../../shared/data/lexicon.data';
 import {
@@ -33,12 +34,11 @@ function fold(value: string): string {
 
 @Component({
   selector: 'ta-lexicon',
-  imports: [PageHeaderComponent, QuickChipComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, PageHeaderComponent, QuickChipComponent],
   template: `
-    <ta-page-header title="Lexique tahitien" />
+    <ta-page-header width="wide" title="Lexique tahitien" />
 
-    <main class="mx-auto max-w-md px-4 pb-28">
+    <main class="page-wide pb-28">
       <input
         type="search"
         placeholder="Chercher un mot…"
@@ -68,50 +68,65 @@ function fold(value: string): string {
       @if (sections().length === 0) {
         <p class="mt-8 text-center text-ink-2">
           @if (filter() === 'favoris') {
-            Aucun favori pour l’instant — touchez l’étoile d’un mot pour le garder ici.
+            Aucun favori pour l’instant : touchez l’étoile d’un mot pour le garder ici.
           } @else {
             Aucun mot ne correspond à cette recherche.
           }
         </p>
       }
 
-      @for (section of sections(); track section.key) {
-        <section class="mt-6">
-          <h2 class="mb-2 text-sm font-semibold tracking-wide text-ink-2 uppercase">
-            {{ section.label }}
-          </h2>
-          <ul class="overflow-hidden rounded-card bg-surface-1">
-            @for (entry of section.entries; track entry.id) {
-              <li class="flex items-center gap-3 border-b border-surface-2 p-3 last:border-b-0">
-                <div class="min-w-0 flex-1">
-                  <p class="text-lg font-semibold">{{ entry.ty }}</p>
-                  <p class="text-ink-1">{{ entry.fr }}</p>
-                  <p class="text-sm text-ink-2 italic">{{ entry.pron }}</p>
-                </div>
-                <button
-                  type="button"
-                  class="grid size-11 shrink-0 place-items-center rounded-full text-2xl"
-                  [class]="favorites.has(entry.id) ? 'text-coral' : 'text-ink-2 opacity-40'"
-                  [attr.aria-label]="
-                    (favorites.has(entry.id)
-                      ? 'Retirer des favoris : '
-                      : 'Ajouter aux favoris : ') + entry.ty
-                  "
-                  [attr.aria-pressed]="favorites.has(entry.id)"
-                  (click)="favorites.toggle(entry.id)"
-                >
-                  {{ favorites.has(entry.id) ? '★' : '☆' }}
-                </button>
-              </li>
-            }
-          </ul>
-        </section>
-      }
+      <div>
+        @for (section of sections(); track section.key) {
+          <section class="mt-6">
+            <h2 class="mb-2 text-sm font-semibold tracking-wide text-ink-2 uppercase">
+              {{ section.label }}
+            </h2>
+            <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              @for (entry of section.entries; track entry.id) {
+                <li class="flex items-center gap-3 rounded-card bg-surface-1 p-3">
+                  <div class="min-w-0 flex-1">
+                    <p class="text-lg font-semibold">{{ entry.ty }}</p>
+                    <p class="text-ink-1">{{ entry.fr }}</p>
+                    <p class="text-sm text-ink-2 italic">{{ entry.pron }}</p>
+                    @if (entry.note) {
+                      <p class="mt-1 text-xs leading-relaxed text-coral">{{ entry.note }}</p>
+                    }
+                  </div>
+                  <button
+                    type="button"
+                    class="grid size-11 shrink-0 place-items-center rounded-full text-2xl"
+                    [class]="favorites.has(entry.id) ? 'text-coral' : 'text-ink-2 opacity-40'"
+                    [attr.aria-label]="
+                      (favorites.has(entry.id)
+                        ? 'Retirer des favoris : '
+                        : 'Ajouter aux favoris : ') + entry.ty
+                    "
+                    [attr.aria-pressed]="favorites.has(entry.id)"
+                    (click)="favorites.toggle(entry.id)"
+                  >
+                    {{ favorites.has(entry.id) ? '★' : '☆' }}
+                  </button>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
 
-      <p class="mt-8 text-sm text-ink-2">
-        L’apostrophe (’eta) marque un léger coup de glotte, les macrons (ā, ē, ī, ō, ū) allongent la
-        voyelle, et chaque voyelle se prononce séparément.
-      </p>
+      <a
+        routerLink="/lexique/prononciation"
+        class="mt-8 flex items-center gap-3 rounded-card bg-surface-1 p-4 active:bg-surface-2"
+      >
+        <span class="text-xl" aria-hidden="true">🔊</span>
+        <span class="min-w-0 flex-1 text-sm">
+          <span class="block font-semibold">Prononcer le tahitien</span>
+          <span class="block text-ink-2">
+            L’eta, les macrons, les voyelles qui se détachent : dix règles pour ne plus buter sur
+            Faa’a ou Teahupo’o.
+          </span>
+        </span>
+        <span class="text-ink-2" aria-hidden="true">›</span>
+      </a>
     </main>
   `,
 })

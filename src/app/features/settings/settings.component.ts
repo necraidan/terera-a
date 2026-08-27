@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UpdateService } from '../../core/update.service';
 import { APP_VERSION } from '../../core/version';
@@ -9,11 +9,10 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
 @Component({
   selector: 'ta-settings',
   imports: [RouterLink, PageHeaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ta-page-header title="Réglages" />
 
-    <main class="mx-auto max-w-md px-4 pb-28">
+    <main class="page-narrow pb-28">
       <ul class="overflow-hidden rounded-card bg-surface-1">
         <li class="flex items-center justify-between gap-3 border-b border-surface-2 p-4">
           <span class="text-ink-2">Version</span>
@@ -44,8 +43,8 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
       <h2 class="mt-8 mb-2 text-sm font-semibold tracking-wide text-ink-2 uppercase">À propos</h2>
       <div class="rounded-card bg-surface-1 p-4 text-sm leading-relaxed text-ink-2">
         <p>
-          <strong class="text-ink-1">Terera’a</strong> — « le voyage » en tahitien. Une boîte à
-          outils pensée pour être utile là où il n’y a pas de réseau : toutes les données sont
+          <strong class="text-ink-1">Terera’a</strong> signifie « le voyage » en tahitien. Une boîte
+          à outils pensée pour être utile là où il n’y a pas de réseau : toutes les données sont
           embarquées dans l’application.
         </p>
         <p class="mt-3">

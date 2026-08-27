@@ -11,8 +11,7 @@ import { provideRouter, withComponentInputBinding, withViewTransitions } from '@
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
 
-// L'app est monolingue française : les pipes de date et de nombre doivent
-// formater en français sans dépendre de la locale du navigateur.
+// App monolingue : les pipes ne doivent pas dépendre de la locale du navigateur.
 registerLocaleData(localeFr);
 
 export const appConfig: ApplicationConfig = {
@@ -20,11 +19,11 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'fr-FR' },
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    // Pas de provideHttpClient : l'app v1 est entièrement hors ligne, toutes ses
-    // données sont des constantes compilées dans le bundle.
+    // Pas de provideHttpClient : rien n'a besoin du réseau, et le fournir « au cas
+    // où » coûterait 5 ko gzip pour du code jamais appelé. Le README décrit les
+    // trois changements à faire le jour où une donnée devra être rafraîchie.
     provideRouter(
       routes,
-      // Lie les paramètres de route aux inputs des composants (cf. /infos/:id).
       withComponentInputBinding(),
       withViewTransitions({ skipInitialTransition: true }),
     ),

@@ -2,11 +2,8 @@ export const TAHITI_TZ = 'Pacific/Tahiti';
 export const FRANCE_TZ = 'Europe/Paris';
 
 /**
- * Décalage d'un fuseau par rapport à UTC, en minutes, à un instant donné.
- *
- * Calculé en comparant l'heure murale du fuseau à l'heure UTC : c'est la seule
- * méthode fiable côté navigateur, `Intl` étant la seule source de vérité sur les
- * règles de changement d'heure.
+ * Décalage d'un fuseau par rapport à UTC, en minutes. On compare l'heure murale à
+ * l'heure UTC : `Intl` est la seule source fiable sur les changements d'heure.
  */
 export function zoneOffsetMinutes(instant: Date, timeZone: string): number {
   const parts = new Intl.DateTimeFormat('en-US', {
@@ -23,7 +20,7 @@ export function zoneOffsetMinutes(instant: Date, timeZone: string): number {
   const get = (type: Intl.DateTimeFormatPartTypes): number =>
     Number(parts.find((part) => part.type === type)?.value ?? '0');
 
-  // `hour` peut valoir 24 en hour12:false pour minuit — Date.UTC le normalise.
+  // `hour` peut valoir 24 en hour12:false pour minuit, Date.UTC le normalise.
   const asUtc = Date.UTC(
     get('year'),
     get('month') - 1,
@@ -36,17 +33,11 @@ export function zoneOffsetMinutes(instant: Date, timeZone: string): number {
   return Math.round((asUtc - instant.getTime()) / 60000);
 }
 
-/**
- * Décalage de la France par rapport à Tahiti, en heures (toujours positif).
- *
- * Tahiti est à UTC−10 toute l'année, la France à UTC+1 ou UTC+2 : le décalage
- * vaut donc 11 h en hiver et 12 h à l'heure d'été française.
- */
+/** 11 h en hiver, 12 h à l'heure d'été française. Tahiti n'a pas de DST. */
 export function hoursAheadOfTahiti(instant: Date): number {
   return (zoneOffsetMinutes(instant, FRANCE_TZ) - zoneOffsetMinutes(instant, TAHITI_TZ)) / 60;
 }
 
-/** Heure murale : minutes depuis minuit, plus le décalage de jour éventuel. */
 export interface WallTime {
   readonly hours: number;
   readonly minutes: number;
@@ -55,16 +46,14 @@ export interface WallTime {
 }
 
 /**
- * Traduit une heure murale d'un fuseau vers l'autre.
- *
- * @param minutesOfDay Heure de départ, en minutes depuis minuit (0–1439).
- * @param offsetHours Décalage à appliquer (positif = le fuseau cible est devant).
+ * @param minutesOfDay Heure de départ, en minutes depuis minuit.
+ * @param offsetHours Positif quand le fuseau cible est devant.
  */
 export function shiftWallTime(minutesOfDay: number, offsetHours: number): WallTime {
   const total = minutesOfDay + offsetHours * 60;
   const dayMinutes = 24 * 60;
 
-  // Modulo positif : -90 min doit donner 22 h 30 la veille, pas -1 h 30.
+  // Modulo positif : -90 min donne 22 h 30 la veille, pas -1 h 30.
   const normalized = ((total % dayMinutes) + dayMinutes) % dayMinutes;
   const shift = Math.floor(total / dayMinutes);
 
@@ -75,22 +64,16 @@ export function shiftWallTime(minutesOfDay: number, offsetHours: number): WallTi
   };
 }
 
-/** Plage horaire pendant laquelle on accepte d'être appelé, heure locale. */
+/** Plage horaire où l'on accepte d'être appelé, heure locale. */
 const POLITE_START_HOUR = 8;
 const POLITE_END_HOUR = 21;
 
 /**
- * Créneau d'appel confortable pour les deux interlocuteurs, exprimé en heure de
- * Tahiti : l'intersection des plages 8 h–21 h locales de chaque côté.
+ * Intersection des plages 8 h–21 h locales des deux côtés, en heure de Tahiti.
  *
- * La plage française, ramenée en heure de Tahiti, tombe à cheval sur minuit (avec
- * 11 h d'écart, 8 h–21 h en France correspond à 21 h–10 h à Tahiti). On ne peut
- * donc pas replier ses bornes indépendamment modulo 24 : on essaie chaque copie
- * de l'intervalle décalée d'un nombre entier de jours et on garde la plus large
- * intersection avec la journée tahitienne.
- *
- * @returns Les bornes en heures de Tahiti, ou `null` si aucun créneau ne convient
- *   aux deux côtés.
+ * La plage française ramenée à Tahiti tombe à cheval sur minuit : on ne peut donc
+ * pas replier ses bornes indépendamment modulo 24. On essaie chaque copie décalée
+ * d'un jour entier et on garde la plus large intersection.
  */
 export function politeCallWindowInTahiti(
   offsetHours: number,

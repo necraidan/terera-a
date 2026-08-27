@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PRACTICAL_SHEETS } from '../../shared/data/practical.data';
 import { PageHeaderComponent } from '../../shared/ui/page-header.component';
@@ -6,12 +6,11 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
 @Component({
   selector: 'ta-practical',
   imports: [RouterLink, PageHeaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ta-page-header title="Infos pratiques" />
+    <ta-page-header width="wide" title="Infos pratiques" />
 
-    <main class="mx-auto max-w-md px-4 pb-28">
-      <ul class="grid gap-3">
+    <main class="page-wide pb-28">
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         @for (sheet of sheets; track sheet.id) {
           <li>
             <a

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UpdateService } from '../../core/update.service';
 
@@ -12,7 +12,6 @@ import { UpdateService } from '../../core/update.service';
 @Component({
   selector: 'ta-update-banner',
   imports: [RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host {
       position: fixed;

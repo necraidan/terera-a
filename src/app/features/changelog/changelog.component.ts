@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { APP_VERSION } from '../../core/version';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CheckOutcome, UpdateService } from '../../core/update.service';
+import { APP_VERSION } from '../../core/version';
 import { WhatsNewService } from '../../core/whats-new.service';
 import { PageHeaderComponent } from '../../shared/ui/page-header.component';
 import { CHANGELOG } from './changelog.data';
@@ -9,11 +9,10 @@ import { CHANGELOG } from './changelog.data';
 @Component({
   selector: 'ta-changelog',
   imports: [DatePipe, PageHeaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ta-page-header title="Nouveautés" backTo="/reglages" backLabel="Retour aux réglages" />
 
-    <main class="mx-auto max-w-md px-4 pb-28">
+    <main class="page-narrow pb-28">
       <section class="rounded-card bg-surface-1 p-4">
         <p class="text-sm text-ink-2">Version installée</p>
         <p class="text-2xl font-bold">{{ appVersion }}</p>
@@ -107,7 +106,7 @@ export class ChangelogComponent {
         return time ? `Vous êtes à jour (vérifié à ${time}).` : 'Vous êtes à jour.';
       }
       case 'error':
-        return 'Vérification impossible — vérifiez votre connexion, puis réessayez.';
+        return 'Vérification impossible : vérifiez votre connexion, puis réessayez.';
       default:
         return null;
     }

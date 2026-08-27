@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import {
   FRANCE_TZ,
   TAHITI_TZ,
@@ -31,21 +24,20 @@ const dateFormat = (timeZone: string) =>
 @Component({
   selector: 'ta-clock',
   imports: [PageHeaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ta-page-header title="Heure à Tahiti" />
+    <ta-page-header width="wide" title="Heure à Tahiti" />
 
-    <main class="mx-auto max-w-md px-4 pb-28">
-      <div class="grid gap-3">
+    <main class="page-wide pb-28">
+      <div class="grid gap-3 sm:grid-cols-2">
         <section class="rounded-card bg-accent p-4 text-accent-ink">
           <p class="text-sm font-medium opacity-80">🌴 Tahiti (Papeete)</p>
-          <p class="text-5xl font-bold tabular-nums">{{ tahitiTime() }}</p>
+          <p class="text-5xl font-bold tabular-nums lg:text-7xl">{{ tahitiTime() }}</p>
           <p class="mt-1 text-sm capitalize opacity-80">{{ tahitiDate() }}</p>
         </section>
 
         <section class="rounded-card bg-surface-1 p-4">
           <p class="text-sm font-medium text-ink-2">🇫🇷 France (Paris)</p>
-          <p class="text-5xl font-bold tabular-nums">{{ franceTime() }}</p>
+          <p class="text-5xl font-bold tabular-nums lg:text-7xl">{{ franceTime() }}</p>
           <p class="mt-1 text-sm text-ink-2 capitalize">{{ franceDate() }}</p>
         </section>
       </div>
@@ -54,64 +46,66 @@ const dateFormat = (timeZone: string) =>
         La France a <strong>{{ offsetHours() }} heures d’avance</strong> sur Tahiti.
       </p>
 
-      <section class="mt-6 rounded-card bg-surface-1 p-4">
-        <h2 class="font-semibold">Convertir une heure</h2>
+      <div class="mt-6 grid items-start gap-4 lg:grid-cols-2">
+        <section class="rounded-card bg-surface-1 p-4">
+          <h2 class="font-semibold">Convertir une heure</h2>
 
-        <div class="mt-3 flex gap-2">
-          <button
-            type="button"
-            class="min-h-11 flex-1 rounded-full text-sm font-medium"
-            [class]="origin() === 'tahiti' ? 'bg-accent text-accent-ink' : 'bg-surface-2'"
-            (click)="origin.set('tahiti')"
-          >
-            Tahiti → France
-          </button>
-          <button
-            type="button"
-            class="min-h-11 flex-1 rounded-full text-sm font-medium"
-            [class]="origin() === 'france' ? 'bg-accent text-accent-ink' : 'bg-surface-2'"
-            (click)="origin.set('france')"
-          >
-            France → Tahiti
-          </button>
-        </div>
+          <div class="mt-3 flex gap-2">
+            <button
+              type="button"
+              class="min-h-11 flex-1 rounded-full text-sm font-medium"
+              [class]="origin() === 'tahiti' ? 'bg-accent text-accent-ink' : 'bg-surface-2'"
+              (click)="origin.set('tahiti')"
+            >
+              Tahiti → France
+            </button>
+            <button
+              type="button"
+              class="min-h-11 flex-1 rounded-full text-sm font-medium"
+              [class]="origin() === 'france' ? 'bg-accent text-accent-ink' : 'bg-surface-2'"
+              (click)="origin.set('france')"
+            >
+              France → Tahiti
+            </button>
+          </div>
 
-        <label class="mt-4 block text-sm font-medium text-ink-2" for="wall-time">
-          Il est {{ origin() === 'tahiti' ? 'à Tahiti' : 'en France' }}
-        </label>
-        <input
-          id="wall-time"
-          type="time"
-          class="mt-1 w-full rounded-lg bg-surface-2 px-3 py-3 text-2xl tabular-nums outline-none"
-          [value]="inputTime()"
-          (input)="onTimeInput($event)"
-        />
+          <label class="mt-4 block text-sm font-medium text-ink-2" for="wall-time">
+            Il est {{ origin() === 'tahiti' ? 'à Tahiti' : 'en France' }}
+          </label>
+          <input
+            id="wall-time"
+            type="time"
+            class="mt-1 w-full rounded-lg bg-surface-2 px-3 py-3 text-2xl tabular-nums outline-none"
+            [value]="inputTime()"
+            (input)="onTimeInput($event)"
+          />
 
-        <p class="mt-4 text-sm font-medium text-ink-2">
-          Soit {{ origin() === 'tahiti' ? 'en France' : 'à Tahiti' }}
-        </p>
-        <p class="text-3xl font-bold tabular-nums">
-          {{ convertedTime() }}
-          @if (convertedDayLabel()) {
-            <span class="text-base font-medium text-coral">{{ convertedDayLabel() }}</span>
+          <p class="mt-4 text-sm font-medium text-ink-2">
+            Soit {{ origin() === 'tahiti' ? 'en France' : 'à Tahiti' }}
+          </p>
+          <p class="text-3xl font-bold tabular-nums">
+            {{ convertedTime() }}
+            @if (convertedDayLabel()) {
+              <span class="text-base font-medium text-coral">{{ convertedDayLabel() }}</span>
+            }
+          </p>
+        </section>
+
+        <section class="rounded-card bg-surface-1 p-4">
+          <h2 class="font-semibold">📞 Quand appeler la famille ?</h2>
+          @if (callWindow(); as window) {
+            <p class="mt-1 text-ink-2">
+              Entre <strong class="text-ink-1">{{ window.startHour }} h</strong> et
+              <strong class="text-ink-1">{{ window.endHour }} h</strong>, heure de Tahiti : il sera
+              alors une heure raisonnable en France.
+            </p>
+          } @else {
+            <p class="mt-1 text-ink-2">
+              Aucun créneau ne convient aux deux côtés : il faudra que quelqu’un veille.
+            </p>
           }
-        </p>
-      </section>
-
-      <section class="mt-4 rounded-card bg-surface-1 p-4">
-        <h2 class="font-semibold">📞 Quand appeler la famille ?</h2>
-        @if (callWindow(); as window) {
-          <p class="mt-1 text-ink-2">
-            Entre <strong class="text-ink-1">{{ window.startHour }} h</strong> et
-            <strong class="text-ink-1">{{ window.endHour }} h</strong>, heure de Tahiti — il sera
-            alors une heure raisonnable en France.
-          </p>
-        } @else {
-          <p class="mt-1 text-ink-2">
-            Aucun créneau ne convient aux deux côtés : il faudra que quelqu’un veille.
-          </p>
-        }
-      </section>
+        </section>
+      </div>
     </main>
   `,
 })
@@ -146,7 +140,7 @@ export class ClockComponent {
   protected readonly convertedTime = computed(() => {
     const wall = this.converted();
     if (wall === null) {
-      return '—';
+      return '--:--';
     }
     return `${pad(wall.hours)}:${pad(wall.minutes)}`;
   });

@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'ta-not-found',
   imports: [RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <main class="mx-auto grid min-h-dvh max-w-md place-items-center px-4 text-center">
       <div>

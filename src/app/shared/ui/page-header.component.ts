@@ -1,16 +1,16 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 /**
- * En-tête d'un écran outil : flèche de retour + titre.
+ * En-tête d'un écran : flèche de retour et titre.
  *
- * `sticky top-0` avec un padding haut en safe-area : en standalone iPhone
- * l'en-tête reste sous l'encoche même quand la page défile.
+ * `sticky` avec un padding haut en safe-area, pour rester sous l'encoche en
+ * standalone iPhone. La largeur suit celle de la page, sans quoi la flèche se
+ * retrouverait seule au bord de l'écran sur desktop.
  */
 @Component({
   selector: 'ta-page-header',
   imports: [RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host {
       display: block;
@@ -22,7 +22,7 @@ import { RouterLink } from '@angular/router';
     }
   `,
   template: `
-    <div class="flex items-center gap-1 px-2 py-2">
+    <div [class]="containerClass()">
       <a
         [routerLink]="backTo()"
         class="grid size-11 shrink-0 place-items-center rounded-full text-ink-2 active:bg-surface-2"
@@ -46,4 +46,10 @@ export class PageHeaderComponent {
   readonly title = input.required<string>();
   readonly backTo = input<string>('/');
   readonly backLabel = input<string>('Retour à l’accueil');
+  /** Doit correspondre au gabarit du `main` de la page. */
+  readonly width = input<'narrow' | 'wide' | 'prose'>('narrow');
+
+  protected readonly containerClass = computed(
+    () => `page-${this.width()} flex items-center gap-1 py-2`,
+  );
 }
