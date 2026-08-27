@@ -69,6 +69,16 @@ npx http-server dist/terera-a/browser -p 8080 -c-1 --proxy "http://127.0.0.1:808
 
 `-c-1` désactive le cache HTTP et `--proxy` fournit le fallback SPA pour les liens profonds. Ouvrez `http://127.0.0.1:8080`, laissez le service worker s'enregistrer (état visible sur `/ngsw/state`), puis coupez le réseau : l'app entière doit continuer à fonctionner.
 
+Attention : sur `localhost`, ngsw bloque son initialisation sur le préchargement complet, alors qu'en production il le fait en tâche de fond. Un test local ne reproduit donc pas fidèlement une installation interrompue.
+
+### Pourquoi la coquille est un `assetGroup` à part
+
+Les groupes de [ngsw-config.json](ngsw-config.json) sont téléchargés dans l'ordre où ils sont déclarés, et les fichiers d'un groupe dans l'ordre alphabétique. Tout ce qui précède `index.html` retarde donc le moment où l'app devient lançable hors ligne.
+
+C'est un vrai risque sur iPhone, où WebKit suspend le service worker dès que l'app passe à l'arrière-plan : une installation interrompue avant `index.html` laisse une app qui, hors ligne, ne rend plus qu'une page d'erreur Safari — le worker tente de récupérer `index.html` sur le réseau, récolte un 504 et l'erreur remonte jusqu'à la navigation. Relancer l'app ne répare rien : le même échec se reproduit tant que le réseau n'est pas revenu.
+
+D'où l'ordre : `shell` (index, JS d'amorçage, CSS, manifeste) d'abord, puis le reste du code, puis les images. Un préchargement interrompu ne coûte alors que du contenu manquant, jamais l'app entière — et `UpdateService` ne recharge jamais la page hors ligne, où un rechargement remplacerait une app dégradée par une app morte.
+
 ## Publier une nouvelle version
 
 L'app prévient l'utilisateur quand une nouvelle version est disponible et lui permet de la déclencher. Pour que ça marche, chaque release suit ces trois étapes :

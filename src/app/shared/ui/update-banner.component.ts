@@ -3,7 +3,8 @@ import { RouterLink } from '@angular/router';
 import { UpdateService } from '../../core/update.service';
 
 /**
- * Bandeau signalant qu'une nouvelle version est prête.
+ * Bandeau signalant qu'une nouvelle version est prête, ou qu'une installation
+ * incomplète attend le retour du réseau pour se réparer.
  *
  * Posé en bas de l'écran (zone du pouce sur iPhone) et décalé de la barre home
  * via la safe-area. Le rejet ne vaut que pour la session : la mise à jour sera
@@ -23,7 +24,35 @@ import { UpdateService } from '../../core/update.service';
     }
   `,
   template: `
-    @if (update.updateAvailable() && !dismissed()) {
+    @if (update.cacheDamaged() && !dismissed()) {
+      <div
+        class="pointer-events-auto mx-auto flex max-w-md items-center gap-3 rounded-card bg-ink-1 p-3 text-surface-1 shadow-lg"
+        role="status"
+      >
+        <span class="text-xl" aria-hidden="true">📡</span>
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-semibold">Installation incomplète</p>
+          <p class="text-sm text-surface-2">
+            Certains écrans peuvent manquer. L’app se répare toute seule au retour du réseau.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="grid size-11 shrink-0 place-items-center rounded-full text-surface-2"
+          aria-label="Masquer"
+          (click)="dismissed.set(true)"
+        >
+          <svg viewBox="0 0 24 24" class="size-5" fill="none" aria-hidden="true">
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+    } @else if (update.updateAvailable() && !dismissed()) {
       <div
         class="pointer-events-auto mx-auto flex max-w-md items-center gap-3 rounded-card bg-ink-1 p-3 text-surface-1 shadow-lg"
         role="status"
