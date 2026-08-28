@@ -30,17 +30,17 @@ Les données qui peuvent se vérifier par le calcul le sont : aucune distance n'
 
 Les tracés viennent d'**OpenStreetMap**, sous licence ODbL, qui impose l'attribution : chaque plan porte son crédit à l'écran. Ils ne sont pas saisis à la main mais générés par [make-tracks.js](scripts/make-tracks.js), où les chemins retenus sont déclarés un par un par leur identifiant OSM, avec ce que le tracé couvre réellement. Aucune sélection automatique par proximité : sans cette liste explicite, une mise à jour d'OSM pourrait faire passer silencieusement un tracé par un sentier voisin.
 
-Quatre des huit tracés sont **partiels**, parce que le bas de l'approche ou la piste d'accès n'est pas cartographié. La fiche le dit, et le trait est dessiné en pointillés. Te Pari, sur la presqu'île, n'a aucun tracé : la côte n'est pas dans OSM, et dessiner une ligne approximative sur un littoral sans échappatoire serait la pire des approximations. L'écran l'annonce plutôt que de meubler.
+Quatre des huit tracés sont **partiels**, parce que le bas de l'approche ou la piste d'accès n'est pas cartographié. La fiche le ditet le trait est dessiné en pointillés. Te Pari, sur la presqu'île, n'a aucun tracé : la côte n'est pas dans OSMet dessiner une ligne approximative sur un littoral sans échappatoire serait la pire des approximations. L'écran l'annonce plutôt que de meubler.
 
-Le fond de carte est **vectoriel, pas raster**, et c'est le cœur du compromis. Des tuiles d'image coûteraient des centaines de kilo-octets par sentier, à précharger pour un usage hors ligne. Une poignée de polylignes triées tient en quelques kilo-octets : la côte, les plans d'eau, les rivières, les routes, les sentiers voisins assez longs pour être des options, et les sommets nommés avec leur altitude. Le brut est inexploitable, cinq cents pistes et deux cent soixante-dix ruisseaux pour une seule emprise noieraient le tracé, donc le script filtre par nature et par longueur, découpe sur le cadre et simplifie jusqu'à tenir un budget de points. Chaque plan porte aussi un **encart de localisation** : la silhouette de l'île et un point sur le sentier, parce qu'à l'échelle d'une vallée le plan ne dit pas de lui-même où l'on se trouve.
+Le fond de carte est **vectoriel, pas raster**et c'est le cœur du compromis. Des tuiles d'image coûteraient des centaines de kilo-octets par sentier, à précharger pour un usage hors ligne. Une poignée de polylignes triées tient en quelques kilo-octets : la côte, les plans d'eau, les rivières, les routes, les sentiers voisins assez longs pour être des optionset les sommets nommés avec leur altitude. Le brut est inexploitable, cinq cents pistes et deux cent soixante-dix ruisseaux pour une seule emprise noieraient le tracé, donc le script filtre par nature et par longueur, découpe sur le cadre et simplifie jusqu'à tenir un budget de points. Chaque plan porte aussi un **encart de localisation** : la silhouette de l'île et un point sur le sentier, parce qu'à l'échelle d'une vallée le plan ne dit pas de lui-même où l'on se trouve.
 
-Un plan reste un **schéma d'orientation, pas un outil de navigation**, et il le dit sous chaque tracé : il n'y a ni position GPS, ni balisage sur le terrain.
+Un plan reste un **schéma d'orientation, pas un outil de navigation**et il le dit sous chaque tracé : il n'y a ni position GPS, ni balisage sur le terrain.
 
 Le lien entre les deux est vérifié par le calcul : la longueur de la polyligne, sommée par `haversineKm`, est comparée à la distance publiée, en tenant compte du fait qu'un aller-retour annonce la distance totale quand le tracé ne décrit qu'un aller. Un tracé annoncé complet doit tomber à moins de trente pour cent de la distance publiée, un tracé partiel doit être franchement plus court. Le plan ne peut donc pas mentir sur la distance, ni la distance sur le plan.
 
 ### Photos
 
-Les billets, les pièces et les espèces marines sont illustrés par des photos de Wikimedia Commons, converties en webp et embarquées dans `public/images/` pour rester disponibles hors ligne. Chaque photo porte son auteur et sa licence dans les données (`money.data.ts`, `wildlife.data.ts`), affichés à l'écran là où la photo est visible en grand. Les fichiers ont été choisis dont le nom porte le nom scientifique, ce qui rend l'identification vérifiable : la photo de tête que Wikipédia associait au requin corail montrait en réalité un requin à ailerons blancs (Carcharhinus albimarginatus), elle a été remplacée. Exception : la photo des dauphins a été fournie sans provenance ; son crédit indique « source non identifiée », faute de pouvoir nommer un auteur et une licence.
+Les billets, les pièces, les espèces marines et une partie des randonnées sont illustrés par des photos de Wikimedia Commons, converties en webp et embarquées dans `public/images/` pour rester disponibles hors ligne. Chaque photo porte son auteur et sa licence dans les données (`money.data.ts`, `wildlife.data.ts`, `hikes.data.ts`), affichés à l'écran là où la photo est visible en grand. Les fichiers ont été choisis dont le nom porte le nom scientifique, ce qui rend l'identification vérifiable : la photo de tête que Wikipédia associait au requin corail montrait en réalité un requin à ailerons blancs (Carcharhinus albimarginatus), elle a été remplacée. Exception : la photo des dauphins a été fournie sans provenance ; son crédit indique « source non identifiée », faute de pouvoir nommer un auteur et une licence. Les randonnées ne portent une photo que si elle montre ce sentier précisément (voie d'ascension, cascade, sommet visé) : quatre fiches restent sans image plutôt que d'afficher une vue générique de l'île.
 
 ## Développement
 
@@ -55,11 +55,58 @@ pnpm test
 pnpm format
 pnpm make:icons     # régénère les icônes depuis le SVG de scripts/make-icons.js
 pnpm make:tracks    # régénère les tracés de randonnée depuis OpenStreetMap
+pnpm make:coastlines <dossier>   # régénère les traits de côte de la carte
 ```
 
 Stack : Angular 22 standalone et zoneless, Tailwind CSS 4 (tokens dans `src/styles.css`), `@angular/service-worker`, tests Vitest.
 
 Les données (lexique, fiches pratiques) sont des constantes TypeScript typées dans `src/app/shared/data/` : elles sont compilées dans le bundle, donc mises en cache par le service worker et disponibles hors ligne par construction.
+
+### Les traits de côte de la carte
+
+La page `/carte` dessine de vrais contours d'îles, dérivés des **land polygons
+d'OpenStreetMap** (© contributeurs d'OpenStreetMap, licence **ODbL** — attribution
+affichée sur la page, dans « L'échelle, vraiment »). Le jeu de données n'est pas
+téléchargé par l'app : [scripts/build-coastlines.js](scripts/build-coastlines.js)
+l'extrait, le découpe, le simplifieet écrit deux GeoJSON dans
+`src/app/shared/data/`, importés comme des modules — donc bundlés, donc précachés
+par le service worker, sans requête réseau ni `assetGroup` supplémentaire.
+
+Le script se lance à la main et **ses sorties sont commitées** : le build de CI
+n'a rien à télécharger.
+
+> ⚠️ **Les deux GeoJSON sont pour l'instant vides** : ils n'ont pas encore été
+> générés, faute d'accès au shapefile source. La carte fonctionne, sans son
+> fond ; l'encart de zoom reste absent. Passez la commande ci-dessous pour les
+> remplir, puis commitez-les.
+
+```bash
+mkdir -p .cache && cd .cache
+curl -O https://osmdata.openstreetmap.de/download/land-polygons-split-4326.zip
+unzip land-polygons-split-4326.zip
+cd ..
+pnpm make:coastlines .cache/land-polygons-split-4326
+```
+
+Prenez impérativement une variante **4326** (degrés). La variante proposée par
+défaut sur [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de/data/land-polygons.html)
+est en 3857 (mètres Mercator) ; le script la refuse plutôt que de produire des
+contours à l'autre bout du monde. Le dossier `.cache/` est ignoré par git : il
+n'y a que les deux sorties à commiter.
+
+| Fichier                        | Contenu                                                      |
+| ------------------------------ | ------------------------------------------------------------ |
+| `coastlines-overview.geo.json` | Les cinq archipels, pour la carte d'ensemble (cible < 40 ko) |
+| `coastlines-detail.geo.json`   | Le contour de chaque île, pour l'encart (cible < 150 ko)     |
+
+Le script journalise le poids de chaque sortie et **avertit pour toute île de
+`ISLANDS` restée sans contour** : son encart sera simplement absent. Les seuils
+de simplification sont exprimés en pixels du rendu final, pas en degrés, donc
+ajuster les dimensions de la carte dans `islands.component.ts` demande de
+relancer le script — les constantes en tête des deux fichiers vont par paire.
+
+Une île ajoutée à `ISLANDS` est prise en compte sans rien toucher : le script
+relit `islands.data.ts`, qui reste la seule source des coordonnées.
 
 ### Rendre une donnée rafraîchissable
 
@@ -87,7 +134,7 @@ Attention : sur `localhost`, ngsw bloque son initialisation sur le préchargemen
 
 ### Pourquoi la coquille est un `assetGroup` à part
 
-Les groupes de [ngsw-config.json](ngsw-config.json) sont téléchargés dans l'ordre où ils sont déclarés, et les fichiers d'un groupe dans l'ordre alphabétique. Tout ce qui précède `index.html` retarde donc le moment où l'app devient lançable hors ligne.
+Les groupes de [ngsw-config.json](ngsw-config.json) sont téléchargés dans l'ordre où ils sont déclaréset les fichiers d'un groupe dans l'ordre alphabétique. Tout ce qui précède `index.html` retarde donc le moment où l'app devient lançable hors ligne.
 
 C'est un vrai risque sur iPhone, où WebKit suspend le service worker dès que l'app passe à l'arrière-plan : une installation interrompue avant `index.html` laisse une app qui, hors ligne, ne rend plus qu'une page d'erreur Safari — le worker tente de récupérer `index.html` sur le réseau, récolte un 504 et l'erreur remonte jusqu'à la navigation. Relancer l'app ne répare rien : le même échec se reproduit tant que le réseau n'est pas revenu.
 

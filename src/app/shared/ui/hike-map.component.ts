@@ -58,12 +58,12 @@ const LINE_ORDER: readonly BaseMapLineKind[] = ['coast', 'river', 'road', 'path'
  * Plan d'une randonnée : un fond de carte vectoriel, le tracé du sentier, ses
  * points remarquables, une échelle et un encart de localisation sur l'île.
  *
- * Le fond est vectoriel et non raster, et c'est le cœur du compromis. Des
+ * Le fond est vectoriel et non rasteret c'est le cœur du compromis. Des
  * tuiles d'image coûteraient des centaines de kilo-octets par sentier, à
- * précharger pour un usage hors ligne, et laisseraient croire à un GPS. Une
+ * précharger pour un usage hors ligneet laisseraient croire à un GPS. Une
  * poignée de polylignes triées, côte, eau, rivières, routes, sentiers voisins
  * et sommets nommés, tient en quelques kilo-octets et répond à la seule
- * question qu'on se pose au départ : où suis-je, et dans quelle direction.
+ * question qu'on se pose au départ : où suis-jeet dans quelle direction.
  */
 @Component({
   selector: 'ta-hike-map',
@@ -171,7 +171,7 @@ const LINE_ORDER: readonly BaseMapLineKind[] = ['coast', 'river', 'road', 'path'
       }
 
       <!-- Échelle : sans elle, un plan sans fond de carte ne dit rien de la
-           distance réelle, et deux sentiers très différents se ressemblent. -->
+           distance réelleet deux sentiers très différents se ressemblent. -->
       <line
         [attr.x1]="scale().x1"
         [attr.y1]="scale().y"
@@ -456,7 +456,7 @@ export class HikeMapComponent {
 
   /**
    * Encart de localisation, projeté dans son propre carré : la silhouette de
-   * l'île, et un point au milieu du sentier. À l'échelle d'une vallée, le plan
+   * l'îleet un point au milieu du sentier. À l'échelle d'une vallée, le plan
    * ne dit pas de lui même où l'on se trouve sur l'île.
    */
   protected readonly locator = computed(() => {

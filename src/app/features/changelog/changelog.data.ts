@@ -11,6 +11,16 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    version: '1.3.0',
+    date: '2026-08-29',
+    changes: [
+      'Nouvelle page Mentions légales : éditeur, hébergement, données personnelles et avertissements.',
+      'Les sources et licences de toutes les données, outil par outil, réunies au même endroit.',
+      'Un pied de page sur l’accueil et dans les réglages y mène, avec le lien vers le code source.',
+      'Des photos sur cinq fiches de randonnée, avec leur auteur et leur licence. Les sentiers dont aucune photo libre ne montre le parcours restent sans image, plutôt qu’illustrés par une vue générique.',
+    ],
+  },
+  {
     version: '1.2.0',
     date: '2026-08-29',
     changes: [

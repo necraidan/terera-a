@@ -142,7 +142,7 @@ describe('HikeMapComponent', () => {
 
   it('dessine le décor derrière le sentier', async () => {
     // Une ligne seule sur du blanc ne dit pas où l'on est : le fond doit être
-    // là, et sous le tracé, jamais par dessus.
+    // làet sous le tracé, jamais par dessus.
     const rendered = await render('mont-rotui');
     const nodes = [...rendered.element.querySelectorAll('svg > *')];
     const firstTrack = nodes.findIndex((node) => node.getAttribute('data-role') === 'track-casing');

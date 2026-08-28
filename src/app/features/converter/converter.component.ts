@@ -24,7 +24,7 @@ const QUICK_XPF = [500, 1000, 2000, 5000, 10000];
   template: `
     <ta-page-header width="wide" title="Franc pacifique ↔ Euro" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <div class="lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-4">
         <div class="rounded-card bg-surface-1 p-4">
           <label class="block text-sm font-medium text-ink-2" for="amount">

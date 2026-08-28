@@ -9,11 +9,11 @@
  * 2. Deux sources : chaque métrique est recoupée sur au moins deux sources
  *    indépendantes. Une source unique est signalée en commentaire.
  * 3. Désaccord : on retient la valeur la plus prudente, c'est à dire la plus
- *    longue et la plus dure, l'arbitrage est justifié en commentaire, et
+ *    longue et la plus dure, l'arbitrage est justifié en commentaireet
  *    `metricsNote` le dit à l'utilisateur quand il doit le savoir.
  * 4. Introuvable : le champ est absent, jamais zéro ni une estimation.
  * 5. Réglementation : `accessNote` est formulé pour survivre à un changement de
- *    tarif ou d'horaire, et renvoie toujours à une vérification sur place.
+ *    tarif ou d'horaireet renvoie toujours à une vérification sur place.
  *
  * Les URLs restent ici, en commentaires : l'app fonctionne hors ligne et
  * content.spec.ts interdit tout lien http dans les données livrées. Le champ
@@ -21,7 +21,7 @@
  *
  * Vérification : août 2026. Une passe adversariale a corrigé trois valeurs de ce
  * lot, dont deux qui comptent : le mont Aorai ne demande pas de guide
- * obligatoire (sentier balisé, refuges), et le dénivelé du col des Trois Pinus
+ * obligatoire (sentier balisé, refuges)et le dénivelé du col des Trois Pinus
  * était surestimé de moitié.
  */
 import { Hike } from './hikes.models';
@@ -31,10 +31,15 @@ export const HIKES: readonly Hike[] = [
   // ville-papeete.pf/articles.php?id=300 (billet), blog-trotting.fr.
   // Désaccord : 9,8 km et +200 m chez tahiti-rando contre 11 km et +170 m
   // ailleurs. Retenu tahiti-rando, seule source à détailler les deux variantes.
+  // Photo : commons.wikimedia.org/wiki/File:The_Fautaua_Castade_-_A_Tahitian_%22Staubach%22,_by_Clement_Lindley_Wragge.jpg
+  // Seule photo libre de la cascade de Loti : un tirage d'époque, assumé
+  // comme tel dans le crédit. La cascade n'a pas bougé.
   {
     id: 'vallee-fautaua',
     name: 'Vallée de la Fautaua',
     islandId: 'tahiti',
+    image: 'images/hikes/vallee-fautaua.webp',
+    photoCredit: 'Clement Lindley Wragge, avant 1906, Domaine public, via Wikimedia Commons',
     difficulty: 'difficile',
     kind: 'aller-retour',
     lengthKm: 9.8,
@@ -58,7 +63,7 @@ export const HIKES: readonly Hike[] = [
       'Deux litres d’eau par personne, l’air de la vallée est très humide',
     ],
     warnings: [
-      'La rivière monte vite : ne vous engagez pas après de fortes pluies, et renoncez si le courant a forci.',
+      'La rivière monte vite : ne vous engagez pas après de fortes pluieset renoncez si le courant a forci.',
     ],
     trackCoverage: 'partiel',
     waypoints: [
@@ -72,12 +77,16 @@ export const HIKES: readonly Hike[] = [
   // Sources : tahiti-rando.fr/rando-tahiti-mont-aorai.php, todotahiti.com,
   // iaorana.com. Durée 8 à 10 h selon les sources, retenu 9 h (le plus prudent).
   // Correction adversariale : guideRequired était à vrai. Le sentier est balisé
-  // et jalonné de refuges, et plusieurs sources indépendantes le donnent
+  // et jalonné de refugeset plusieurs sources indépendantes le donnent
   // faisable sans guide. Ramené à « conseillé », la crête reste sérieuse.
+  // Photo : commons.wikimedia.org/wiki/File:Tahiti-Aorai.jpg, prise sur la
+  // voie d'ascension juste sous le sommet (description de l'auteur).
   {
     id: 'mont-aorai',
     name: 'Mont Aorai',
     islandId: 'tahiti',
+    image: 'images/hikes/mont-aorai.webp',
+    photoCredit: 'Friedjoff Trautwein, CC BY-SA 1.0, via Wikimedia Commons',
     difficulty: 'tres-difficile',
     kind: 'aller-retour',
     lengthKm: 18,
@@ -165,7 +174,7 @@ export const HIKES: readonly Hike[] = [
       'Le dénivelé n’est pas publié : le parcours reste côtier, mais l’enchaînement des rochers et des passages dans l’eau rend la progression bien plus lente qu’un sentier de plaine.',
     guide: 'obligatoire',
     guideNote:
-      'La côte n’est accessible qu’en bateau, le cheminement passe par des passages aquatiques et des terrains habités, et il n’existe aucune échappatoire une fois engagé. Les opérateurs de la presqu’île encadrent la traversée.',
+      'La côte n’est accessible qu’en bateau, le cheminement passe par des passages aquatiques et des terrains habitéset il n’existe aucune échappatoire une fois engagé. Les opérateurs de la presqu’île encadrent la traversée.',
     accessNote:
       'Accès uniquement par la mer depuis Teahupoo. Renseignez vous auprès d’un opérateur de la presqu’île pour la navette et l’encadrement.',
     summary:
@@ -194,10 +203,14 @@ export const HIKES: readonly Hike[] = [
   // Désaccord marqué : 4,3 km et +198 m (denivpositif), 5,9 km et +298 m
   // (decathlon), 7 km et 3 h (tahiti-rando), selon le point de départ retenu sur
   // le plateau. Retenu le plus long et le plus raide, exposé dans metricsNote.
+  // Photo : commons.wikimedia.org/wiki/File:Moorea_Trail_to_Belvedere_Lookout.jpg,
+  // géolocalisée au départ du sentier, au Belvédère.
   {
     id: 'col-trois-cocotiers',
     name: 'Col des Trois Cocotiers',
     islandId: 'moorea',
+    image: 'images/hikes/col-trois-cocotiers.webp',
+    photoCredit: 'Olivier Bruchez, CC BY-SA 2.0, via Wikimedia Commons',
     difficulty: 'facile',
     kind: 'aller-retour',
     lengthKm: 7,
@@ -218,7 +231,7 @@ export const HIKES: readonly Hike[] = [
       'Un litre et demi d’eau par personne',
       'Se garer au belvédère ou près des marae, selon la variante choisie',
     ],
-    warnings: ['Terrain argileux très glissant après la pluie, et quelques cordes près du col.'],
+    warnings: ['Terrain argileux très glissant après la pluieet quelques cordes près du col.'],
     trackCoverage: 'complet',
     waypoints: [
       { lat: -17.54054, lon: -149.82665, label: 'Départ, plateau d’Opunohu' },
@@ -278,7 +291,7 @@ export const HIKES: readonly Hike[] = [
     elevationGainM: 120,
     guide: 'facultatif',
     accessNote:
-      'Le chemin part d’Afareaitu et traverse des terrains habités : restez sur le sentier, et demandez si un accès paraît fermé.',
+      'Le chemin part d’Afareaitu et traverse des terrains habités : restez sur le sentieret demandez si un accès paraît fermé.',
     summary:
       'Une marche facile depuis Afareaitu jusqu’à une cascade encaissée, avec un bassin où l’on peut se baigner quand le niveau d’eau le permet.',
     highlights: [
@@ -291,7 +304,7 @@ export const HIKES: readonly Hike[] = [
       'Chaussures qui tiennent au mouillé, la fin du parcours est humide',
       'Y aller le matin : la vallée perd le soleil tôt',
     ],
-    warnings: ['Les roches du bassin sont glissantes, et la rivière grossit vite après la pluie.'],
+    warnings: ['Les roches du bassin sont glissanteset la rivière grossit vite après la pluie.'],
     trackCoverage: 'partiel',
     waypoints: [
       { lat: -17.54028, lon: -149.79321, label: 'Début du tracé' },
@@ -304,10 +317,13 @@ export const HIKES: readonly Hike[] = [
   // Sources : alltrails.com (mount-rotui-depuis-faimano),
   // polynesie.liliguide.com, wikiloc.com. Traces de 7 à 9 km et de 800 à 900 m
   // de dénivelé : retenu le plus long et le plus raide.
+  // Photo : commons.wikimedia.org/wiki/File:PF-Moorea-mt-rotui.jpg
   {
     id: 'mont-rotui',
     name: 'Mont Rotui',
     islandId: 'moorea',
+    image: 'images/hikes/mont-rotui.webp',
+    photoCredit: 'Balou46, CC BY-SA 4.0, via Wikimedia Commons',
     difficulty: 'tres-difficile',
     kind: 'aller-retour',
     lengthKm: 8,
@@ -317,7 +333,7 @@ export const HIKES: readonly Hike[] = [
       'Les traces publiées vont de 7 à 9 km et de 800 à 900 m de dénivelé. Les valeurs les plus élevées sont retenues.',
     guide: 'conseille',
     guideNote:
-      'La crête est étroite et exposée, avec des passages d’escalade et une végétation qui masque le cheminement. L’itinéraire se perd facilement, et des secours héliportés ont déjà été nécessaires.',
+      'La crête est étroite et exposée, avec des passages d’escalade et une végétation qui masque le cheminement. L’itinéraire se perd facilementet des secours héliportés ont déjà été nécessaires.',
     summary:
       'La montagne qui sépare les baies de Cook et d’Opunohu, gravie par sa crête jusqu’à 899 m. La plus engagée des randonnées de Moorea.',
     highlights: [
@@ -348,10 +364,14 @@ export const HIKES: readonly Hike[] = [
   // Sources : alltrails.com/trail/french-polynesia/moorea/mou-aputa,
   // moanavoyages.com, manawa.com. Désaccord très large, de 3,5 à 9 km selon les
   // traces : retenu 7 km, valeur médiane haute, désaccord exposé à l'écran.
+  // Photo : commons.wikimedia.org/wiki/File:Mouaputa_and_Tohivea_from_Cooks_Bay,_2025.jpg,
+  // depuis la baie de Cook : le trou dans la crête est visible à gauche.
   {
     id: 'mont-mouaputa',
     name: 'Mont Mou’aputa, la montagne percée',
     islandId: 'moorea',
+    image: 'images/hikes/mont-mouaputa.webp',
+    photoCredit: 'Jp2207, CC0, via Wikimedia Commons',
     difficulty: 'tres-difficile',
     kind: 'aller-retour',
     lengthKm: 7,
@@ -394,7 +414,7 @@ export const HIKES: readonly Hike[] = [
  * Ce que l'app dit d'elle même sur les randonnées, affiché en pied de liste.
  *
  * Ce n'est pas une clause de style : les sentiers polynésiens sont rarement
- * balisés, souvent sur du foncier privé, et les cotations varient d'une source à
+ * balisés, souvent sur du foncier privéet les cotations varient d'une source à
  * l'autre. Mieux vaut le dire une fois clairement que le laisser découvrir.
  */
 export const HIKE_DISCLAIMER: readonly string[] = [

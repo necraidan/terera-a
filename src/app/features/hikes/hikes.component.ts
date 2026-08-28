@@ -24,7 +24,6 @@ import {
 import { ISLANDS } from '../../shared/data/islands.data';
 import { readStored, writeStored } from '../../shared/data/storage';
 import { PageHeaderComponent } from '../../shared/ui/page-header.component';
-import { QuickChipComponent } from '../../shared/ui/quick-chip.component';
 
 /**
  * L'île choisie survit à la session : on reste plusieurs jours sur la même île,
@@ -42,66 +41,88 @@ interface Group {
 
 @Component({
   selector: 'ta-hikes',
-  imports: [RouterLink, PageHeaderComponent, QuickChipComponent],
+  imports: [RouterLink, PageHeaderComponent],
   template: `
     <ta-page-header width="wide" title="Randonnées" />
 
-    <main class="page-wide pb-28">
-      <label class="block text-sm font-medium text-ink-2" for="hike-island">Île</label>
-      <select
-        id="hike-island"
-        class="mt-1 w-full rounded-lg bg-surface-1 px-3 py-3 text-lg outline-none"
-        [value]="island() ?? ''"
-        (change)="onIsland($event)"
-      >
-        <option value="">Toutes les îles</option>
-        @for (option of islandOptions(); track option.id) {
-          <option [value]="option.id">{{ option.name }} ({{ option.count }})</option>
-        }
-      </select>
+    <main class="page-wide">
+      <!--
+        Quatre selects en grille plutôt que des rangées de puces : sur mobile,
+        les puces occupaient la moitié de l'écran avant la première randonnée.
+        Quatre colonnes seulement à partir de md : à 640 px, « Très difficile »
+        ne tiendrait plus dans un quart de largeur.
 
-      <p class="mt-4 text-xs font-medium tracking-wide text-ink-2 uppercase">Difficulté</p>
-      <div class="-mx-4 mt-1 flex gap-2 overflow-x-auto px-4 pb-1">
-        <ta-quick-chip
-          label="Toutes"
-          [selected]="difficulty() === null"
-          (picked)="difficulty.set(null)"
-        />
-        @for (level of difficultyOrder; track level) {
-          <ta-quick-chip
-            [label]="difficultyLabels[level]"
-            [selected]="difficulty() === level"
-            (picked)="difficulty.set(level)"
-          />
-        }
-      </div>
+        L'état est porté par [selected] sur chaque option, pas par [value] sur
+        le select : Angular écrit la valeur du select avant que @for n'ait
+        inséré ses options, et une île présélectionnée (?ile= ou mémoire)
+        s'afficherait comme « Toutes les îles » tout en filtrant la liste.
+      -->
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div>
+          <label class="block text-sm font-medium text-ink-2" for="hike-island">Île</label>
+          <select
+            id="hike-island"
+            class="mt-1 w-full rounded-lg bg-surface-1 px-3 py-3 text-base outline-none"
+            (change)="onIsland($event)"
+          >
+            <option value="" [selected]="island() === null">Toutes les îles</option>
+            @for (option of islandOptions(); track option.id) {
+              <option [value]="option.id" [selected]="option.id === island()">
+                {{ option.name }} ({{ option.count }})
+              </option>
+            }
+          </select>
+        </div>
 
-      <p class="mt-3 text-xs font-medium tracking-wide text-ink-2 uppercase">Longueur</p>
-      <div class="-mx-4 mt-1 flex gap-2 overflow-x-auto px-4 pb-1">
-        <ta-quick-chip label="Toutes" [selected]="length() === null" (picked)="length.set(null)" />
-        @for (bucket of lengthOrder; track bucket) {
-          <ta-quick-chip
-            [label]="lengthLabels[bucket]"
-            [selected]="length() === bucket"
-            (picked)="length.set(bucket)"
-          />
-        }
-      </div>
+        <div>
+          <label class="block text-sm font-medium text-ink-2" for="hike-difficulty">
+            Difficulté
+          </label>
+          <select
+            id="hike-difficulty"
+            class="mt-1 w-full rounded-lg bg-surface-1 px-3 py-3 text-base outline-none"
+            (change)="onDifficulty($event)"
+          >
+            <option value="" [selected]="difficulty() === null">Toutes</option>
+            @for (level of difficultyOrder; track level) {
+              <option [value]="level" [selected]="level === difficulty()">
+                {{ difficultyLabels[level] }}
+              </option>
+            }
+          </select>
+        </div>
 
-      <p class="mt-3 text-xs font-medium tracking-wide text-ink-2 uppercase">Durée</p>
-      <div class="-mx-4 mt-1 flex gap-2 overflow-x-auto px-4 pb-1">
-        <ta-quick-chip
-          label="Toutes"
-          [selected]="duration() === null"
-          (picked)="duration.set(null)"
-        />
-        @for (bucket of durationOrder; track bucket) {
-          <ta-quick-chip
-            [label]="durationLabels[bucket]"
-            [selected]="duration() === bucket"
-            (picked)="duration.set(bucket)"
-          />
-        }
+        <div>
+          <label class="block text-sm font-medium text-ink-2" for="hike-length">Longueur</label>
+          <select
+            id="hike-length"
+            class="mt-1 w-full rounded-lg bg-surface-1 px-3 py-3 text-base outline-none"
+            (change)="onLength($event)"
+          >
+            <option value="" [selected]="length() === null">Toutes</option>
+            @for (bucket of lengthOrder; track bucket) {
+              <option [value]="bucket" [selected]="bucket === length()">
+                {{ lengthLabels[bucket] }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-ink-2" for="hike-duration">Durée</label>
+          <select
+            id="hike-duration"
+            class="mt-1 w-full rounded-lg bg-surface-1 px-3 py-3 text-base outline-none"
+            (change)="onDuration($event)"
+          >
+            <option value="" [selected]="duration() === null">Toutes</option>
+            @for (bucket of durationOrder; track bucket) {
+              <option [value]="bucket" [selected]="bucket === duration()">
+                {{ durationLabels[bucket] }}
+              </option>
+            }
+          </select>
+        </div>
       </div>
 
       <div class="mt-4 flex items-baseline justify-between gap-3">
@@ -131,6 +152,16 @@ interface Group {
                   [routerLink]="['/randonnees', hike.id]"
                   class="min-w-0 flex-1 rounded-card p-4 active:bg-surface-2"
                 >
+                  @if (hike.image) {
+                    <img
+                      [src]="hike.image"
+                      alt=""
+                      width="660"
+                      height="440"
+                      loading="lazy"
+                      class="mb-3 aspect-[3/2] w-full rounded-lg object-cover"
+                    />
+                  }
                   <span class="flex items-start justify-between gap-2">
                     <span class="min-w-0 font-semibold">{{ hike.name }}</span>
                     <span
@@ -303,8 +334,19 @@ export class HikesComponent {
   }
 
   protected onIsland(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.island.set(value === '' ? null : value);
+    this.island.set(selectValue(event));
+  }
+
+  protected onDifficulty(event: Event): void {
+    this.difficulty.set(selectValue(event) as HikeDifficulty | null);
+  }
+
+  protected onLength(event: Event): void {
+    this.length.set(selectValue(event) as LengthBucket | null);
+  }
+
+  protected onDuration(event: Event): void {
+    this.duration.set(selectValue(event) as DurationBucket | null);
   }
 
   protected reset(): void {
@@ -313,6 +355,12 @@ export class HikesComponent {
     this.length.set(null);
     this.duration.set(null);
   }
+}
+
+/** L'option vide de chaque select vaut « toutes ». */
+function selectValue(event: Event): string | null {
+  const value = (event.target as HTMLSelectElement).value;
+  return value === '' ? null : value;
 }
 
 /** L'île retenue n'est restaurée que si elle a encore des randonnées. */

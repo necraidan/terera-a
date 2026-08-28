@@ -29,7 +29,7 @@ const BASEMAP_FILE = fileURLToPath(
 
 const OVERPASS = 'https://overpass-api.de/api/interpreter';
 
-/** Hors du dépôt, et déjà ignoré par git. */
+/** Hors du dépôtet déjà ignoré par git. */
 const CACHE_DIR = fileURLToPath(
   new URL('../node_modules/.cache/terera-a-tracks/', import.meta.url),
 );
@@ -164,7 +164,7 @@ function lengthM(points) {
 /**
  * Cache disque des réponses Overpass, sous node_modules pour rester hors du
  * dépôt. Ce script sert à mettre au point des filtres d'affichage : refaire le
- * téléchargement à chaque essai coûterait des minutes d'attente, et solliciter
+ * téléchargement à chaque essai coûterait des minutes d'attenteet solliciter
  * l'instance publique pour une donnée qu'on a déjà serait discourtois.
  * `pnpm make:tracks --refresh` ignore le cache.
  */
@@ -405,7 +405,7 @@ function clip(points, box) {
  * ruisseaux pour une seule emprise noieraient le tracé et pèseraient plus que
  * tout le reste de l'app. On garde ce qui sert à se situer, à l'échelle où on
  * lit le plan : la côte, l'eau, les rivières, les routes, les sentiers voisins
- * assez longs pour être des options, et les sommets nommés.
+ * assez longs pour être des optionset les sommets nommés.
  */
 function pickContext(elements, box, ownWays) {
   const lines = [];
@@ -550,7 +550,7 @@ async function fetchOutlines() {
     // La côte est découpée en plusieurs chemins : on garde tous ceux qui
     // tombent dans l'emprise et dépassent le kilomètre et demi, ce qui écarte
     // les motu et les îlots sans amputer l'île. Ne garder que les plus longs
-    // coupait la pointe nord de Moorea, et le départ du Rotui avec elle.
+    // coupait la pointe nord de Mooreaet le départ du Rotui avec elle.
     const rings = elements
       .map((element) => (element.geometry ?? []).map((point) => [point.lat, point.lon]))
       .filter(
@@ -565,7 +565,7 @@ async function fetchOutlines() {
     }
 
     // La tolérance part fine et ne se relâche que pour tenir le budget : à
-    // 150 m d'emblée, la pointe nord de Moorea disparaissait, et le repère de
+    // 150 m d'emblée, la pointe nord de Moorea disparaissaitet le repère de
     // l'encart tombait hors de l'île pour le mont Rotui.
     let tolerance = 40;
     let simplified = rings.map((ring) => simplify(ring, tolerance));
@@ -615,7 +615,7 @@ async function main() {
   const geometries = await fetchGeometries(ids);
 
   // Les tracés d'abord : leurs emprises déterminent ce qu'il faut demander
-  // pour le décor, et une seule requête suffit ensuite pour tous.
+  // pour le décoret une seule requête suffit ensuite pour tous.
   const drawn = TRACKS.map((track) => {
     const segments = track.ways.map((id) => {
       const geometry = geometries.get(id);
@@ -686,7 +686,7 @@ async function main() {
  * tracé couvre réellement.
  *
  * Un tracé est un schéma d'orientation, pas un outil de navigation : il est
- * simplifié, parfois partiel, et l'écran le dit.
+ * simplifié, parfois partielet l'écran le dit.
  */
 import { TrackPoint } from './hikes.models';
 
@@ -701,12 +701,12 @@ ${blocks.join('\n')}
  * FICHIER GÉNÉRÉ par \`pnpm make:tracks\`, ne pas éditer à la main.
  *
  * Le fond est trié, pas exhaustif : la côte, l'eau, les rivières, les routes,
- * les sentiers voisins assez longs pour être des options, et les sommets
+ * les sentiers voisins assez longs pour être des optionset les sommets
  * nommés. Les pistes et les ruisseaux courts sont écartés, sinon le tracé se
  * noierait dans son propre décor et le fond pèserait plus que toute l'app.
  *
  * Pas de tuiles raster : elles coûteraient des centaines de kilo-octets par
- * sentier à précharger, et laisseraient croire à un GPS.
+ * sentier à préchargeret laisseraient croire à un GPS.
  */
 import { HikeBaseMap, TrackPoint } from './hikes.models';
 

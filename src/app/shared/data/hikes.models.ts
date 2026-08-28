@@ -3,7 +3,7 @@
  *
  * Règle du jeu de données : une métrique introuvable dans les sources est
  * absente, jamais zéro ni une estimation. Les écrans affichent « non publiée »
- * plutôt que d'inventer, et les filtres excluent ce qu'on ne sait pas mesurer.
+ * plutôt que d'inventeret les filtres excluent ce qu'on ne sait pas mesurer.
  *
  * Les URLs des sources et les arbitrages vivent en commentaires de
  * hikes.data.ts : l'app est hors ligne et aucun lien http n'a sa place dans les
@@ -28,7 +28,7 @@ export type TrackPoint = readonly [number, number];
 
 /**
  * Ce que le tracé couvre réellement. `partiel` est fréquent : les sentiers
- * polynésiens ne sont cartographiés qu'en partie, et prétendre le contraire
+ * polynésiens ne sont cartographiés qu'en partieet prétendre le contraire
  * serait la pire des erreurs sur un plan de randonnée.
  */
 export type TrackCoverage = 'complet' | 'partiel';
@@ -72,6 +72,13 @@ export interface Hike {
   readonly name: string;
   /** Référence `Island.id` de islands.data.ts, jamais un nom en clair. */
   readonly islandId: string;
+  /**
+   * `images/hikes/<id>.webp`, 660 × 440. Absente quand aucune photo libre ne
+   * montre ce sentier précisément : une vue « de l'île » serait trompeuse.
+   */
+  readonly image?: string;
+  /** Auteur et licence, affichés sous la photo. Obligatoire avec `image`. */
+  readonly photoCredit?: string;
   readonly difficulty: HikeDifficulty;
   readonly kind: HikeKind;
   /** Distance totale du parcours en km, absente si aucune source ne la publie. */

@@ -27,7 +27,7 @@ const COIN_SCALE = 2.4;
   template: `
     <ta-page-header width="wide" title="Billets et pièces" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <div class="flex gap-2">
         <ta-quick-chip
           label="Billets"
@@ -267,10 +267,6 @@ const COIN_SCALE = 2.4;
         </ul>
       </section>
 
-      <p class="mt-6 text-sm text-ink-2">
-        Billets de la série 2014, pièces de la série 2021. Les anciennes séries n’ont plus cours
-        légal mais restent échangeables aux guichets de l’IEOM, à Papeete.
-      </p>
       <p class="mt-2 text-xs text-ink-2">
         Photos de Wikimedia Commons.
         @for (credit of credits; track credit.author) {

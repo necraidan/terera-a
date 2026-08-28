@@ -6,7 +6,12 @@
     <base href="/" />
     <!-- viewport-fit=cover : indispensable pour que env(safe-area-inset-*) soit
          renseigné en standalone sur iPhone à encoche / Dynamic Island. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- maximum-scale / user-scalable : pas de zoom pinch (Android). iOS l'ignore,
+         d'où le blocage des événements gesture* ci-dessous. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
     <meta name="description" content="Boîte à outils hors ligne pour un voyage en Polynésie française." />
 
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ec" />
@@ -26,5 +31,11 @@
   <body>
     <ta-root></ta-root>
     <noscript>Cette application nécessite JavaScript pour fonctionner.</noscript>
+      <script>
+      // iOS Safari ignore user-scalable=no : on bloque le pinch à la source.
+      for (const t of ['gesturestart', 'gesturechange', 'gestureend']) {
+        document.addEventListener(t, (e) => e.preventDefault(), { passive: false });
+      }
+    </script>
   </body>
 </html>

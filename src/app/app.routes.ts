@@ -110,6 +110,11 @@ export const routes: Routes = [
       import('./features/changelog/changelog.component').then((m) => m.ChangelogComponent),
   },
   {
+    path: 'mentions-legales',
+    title: 'Mentions légales · Terera’a',
+    loadComponent: () => import('./features/legal/legal.component').then((m) => m.LegalComponent),
+  },
+  {
     path: '**',
     title: 'Page introuvable · Terera’a',
     loadComponent: () =>

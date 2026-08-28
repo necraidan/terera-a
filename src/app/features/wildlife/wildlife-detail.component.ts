@@ -14,7 +14,7 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
       backLabel="Retour à la faune marine"
     />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       @let current = species();
 
       @if (current) {

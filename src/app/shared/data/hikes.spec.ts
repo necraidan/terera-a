@@ -2,8 +2,8 @@ import { haversineKm } from './geo';
 import { HIKE_BASEMAPS, ISLAND_OUTLINES } from './hikes.basemap';
 import { HIKES, HIKE_DISCLAIMER } from './hikes.data';
 import {
-  DURATION_ORDER,
   DIFFICULTY_ORDER,
+  DURATION_ORDER,
   Hike,
   LENGTH_ORDER,
   formatDuration,
@@ -168,7 +168,7 @@ describe('plausibilité des métriques', () => {
 });
 
 describe('tracés des randonnées', () => {
-  it('associe un tracé à toute fiche qui en annonce un, et réciproquement', () => {
+  it('associe un tracé à toute fiche qui en annonce unet réciproquement', () => {
     for (const hike of HIKES) {
       const track = HIKE_TRACKS[hike.id];
       if (hike.trackCoverage === undefined) {
@@ -195,7 +195,7 @@ describe('tracés des randonnées', () => {
 
   it('place chaque tracé sur l’île de sa randonnée', () => {
     // Une longitude au signe inversé enverrait le sentier à l'autre bout du
-    // Pacifique, et le plan afficherait une ligne vide.
+    // Pacifiqueet le plan afficherait une ligne vide.
     for (const hike of HIKES) {
       const track = HIKE_TRACKS[hike.id];
       const island = islandOf(hike);
@@ -265,7 +265,7 @@ describe('tracés des randonnées', () => {
 describe('fond de carte des plans', () => {
   const KINDS = ['coast', 'river', 'road', 'path'];
 
-  it('donne un fond à chaque tracé, et rien d’orphelin', () => {
+  it('donne un fond à chaque tracéet rien d’orphelin', () => {
     for (const id of Object.keys(HIKE_TRACKS)) {
       expect(HIKE_BASEMAPS[id], `${id} : fond manquant`).toBeDefined();
     }

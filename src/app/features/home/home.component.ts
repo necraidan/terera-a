@@ -34,11 +34,11 @@ const TOOLS: readonly Tool[] = [
   selector: 'ta-home',
   imports: [RouterLink, ToolCardComponent],
   template: `
-    <main class="page-wide pb-28" style="padding-top: env(safe-area-inset-top)">
+    <main class="page-wide" style="padding-top: env(safe-area-inset-top)">
       <header class="flex items-start justify-between gap-3 pt-4 pb-6">
         <div>
-          <p class="text-2xl font-bold">Ia ora na 🌺</p>
-          <p class="text-ink-2">Votre boîte à outils, même sans réseau.</p>
+          <p class="text-2xl font-bold">Terera'a 🌺</p>
+          <p class="text-ink-2">La boite à outils pour la Polynésie Française.</p>
         </div>
         <a
           routerLink="/reglages"

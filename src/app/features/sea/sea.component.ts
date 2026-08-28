@@ -17,52 +17,60 @@ const MAX_DAY_OFFSET = 180;
   template: `
     <ta-page-header width="wide" title="Soleil et marées" />
 
-    <main class="page-wide pb-28">
-      <div class="max-w-lg">
-        <label class="block text-sm font-medium text-ink-2" for="island">Île</label>
-        <select
-          id="island"
-          class="mt-1 w-full rounded-lg bg-surface-1 px-3 py-3 text-lg outline-none"
-          [value]="island().id"
-          (change)="onIsland($event)"
-        >
-          @for (group of grouped(); track group.id) {
-            <optgroup [label]="group.name">
-              @for (item of group.islands; track item.id) {
-                <option [value]="item.id">{{ label(item) }}</option>
-              }
-            </optgroup>
-          }
-        </select>
-
-        <div class="mt-3 flex items-center gap-2">
-          <button
-            type="button"
-            class="grid size-11 shrink-0 place-items-center rounded-full bg-surface-1 text-lg active:bg-surface-2"
-            aria-label="Jour précédent"
-            (click)="shiftDay(-1)"
+    <main class="page-wide">
+      <!-- Sur mobile les deux commandes s'empilent ; dès sm: elles partagent une
+           ligne, le sélecteur prenant la place restante à côté du choix du jour. -->
+      <div class="max-w-3xl sm:flex sm:items-start sm:gap-4">
+        <div class="sm:min-w-0 sm:flex-1">
+          <label class="block text-sm font-medium text-ink-2" for="island">Île</label>
+          <select
+            id="island"
+            class="mt-1 w-full rounded-lg bg-surface-1 px-3 py-3 text-lg outline-none"
+            [value]="island().id"
+            (change)="onIsland($event)"
           >
-            ‹
-          </button>
-          <p class="flex-1 text-center text-sm font-medium capitalize">{{ dateLabel() }}</p>
-          <button
-            type="button"
-            class="grid size-11 shrink-0 place-items-center rounded-full bg-surface-1 text-lg active:bg-surface-2"
-            aria-label="Jour suivant"
-            (click)="shiftDay(1)"
-          >
-            ›
-          </button>
+            @for (group of grouped(); track group.id) {
+              <optgroup [label]="group.name">
+                @for (item of group.islands; track item.id) {
+                  <option [value]="item.id">{{ label(item) }}</option>
+                }
+              </optgroup>
+            }
+          </select>
         </div>
-        @if (dayOffset() !== 0) {
-          <button
-            type="button"
-            class="mt-2 w-full text-center text-sm text-accent underline underline-offset-2"
-            (click)="dayOffset.set(0)"
-          >
-            Revenir à aujourd’hui
-          </button>
-        }
+
+        <div class="mt-3 sm:mt-0 sm:w-72 sm:shrink-0">
+          <p class="text-sm font-medium text-ink-2" id="day-label">Jour</p>
+          <!-- h-13 = hauteur du select (py-3 + text-lg), pour aligner les deux commandes. -->
+          <div class="mt-1 flex h-13 items-center gap-2" role="group" aria-labelledby="day-label">
+            <button
+              type="button"
+              class="grid size-11 shrink-0 place-items-center rounded-full bg-surface-1 text-lg active:bg-surface-2"
+              aria-label="Jour précédent"
+              (click)="shiftDay(-1)"
+            >
+              ‹
+            </button>
+            <p class="flex-1 text-center text-sm font-medium capitalize">{{ dateLabel() }}</p>
+            <button
+              type="button"
+              class="grid size-11 shrink-0 place-items-center rounded-full bg-surface-1 text-lg active:bg-surface-2"
+              aria-label="Jour suivant"
+              (click)="shiftDay(1)"
+            >
+              ›
+            </button>
+          </div>
+          @if (dayOffset() !== 0) {
+            <button
+              type="button"
+              class="mt-2 w-full text-center text-sm text-accent underline underline-offset-2"
+              (click)="dayOffset.set(0)"
+            >
+              Revenir à aujourd’hui
+            </button>
+          }
+        </div>
       </div>
 
       <div class="mt-4 gap-x-3 lg:columns-2">

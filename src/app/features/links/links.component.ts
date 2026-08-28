@@ -18,7 +18,7 @@ interface Section {
   template: `
     <ta-page-header width="wide" title="Liens utiles" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <p class="rounded-card bg-surface-2 p-3 text-sm leading-relaxed">
         <span class="font-semibold">📡 Connexion requise.</span>
         {{ warning }}
@@ -97,11 +97,6 @@ interface Section {
           </section>
         }
       </div>
-
-      <p class="mt-8 text-sm text-ink-2">
-        Touchez l’étoile pour épingler un lien : il remonte en tête de page. Chaque adresse a été
-        vérifiée une par une.
-      </p>
     </main>
   `,
 })

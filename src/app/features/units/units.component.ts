@@ -29,7 +29,7 @@ interface Conversion {
   template: `
     <ta-page-header width="wide" title="Convertisseur d’unités" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         @for (item of categories; track item.id) {
           <ta-quick-chip

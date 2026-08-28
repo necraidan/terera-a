@@ -9,7 +9,7 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
   template: `
     <ta-page-header width="wide" title="Infos pratiques" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         @for (sheet of sheets; track sheet.id) {
           <li>

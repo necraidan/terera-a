@@ -38,7 +38,7 @@ function fold(value: string): string {
   template: `
     <ta-page-header width="wide" title="Lexique tahitien" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <input
         type="search"
         placeholder="Chercher un mot…"

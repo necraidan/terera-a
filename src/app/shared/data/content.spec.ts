@@ -1,3 +1,4 @@
+import { HIKES } from './hikes.data';
 import { LEXICON } from './lexicon.data';
 import { CATEGORY_LABELS, CATEGORY_ORDER } from './lexicon.models';
 import { PRACTICAL_SHEETS } from './practical.data';
@@ -90,6 +91,19 @@ describe('PRACTICAL_SHEETS', () => {
           }
         }
       }
+    }
+  });
+});
+
+describe('HIKES', () => {
+  it('nomme sa photo d’après son identifiant, avec auteur et licence', () => {
+    for (const hike of HIKES) {
+      if (hike.image === undefined) {
+        expect(hike.photoCredit).toBeUndefined();
+        continue;
+      }
+      expect(hike.image).toBe(`images/hikes/${hike.id}.webp`);
+      expect(hike.photoCredit).toMatch(/, (CC[ 0]|Domaine public|image fournie)/);
     }
   });
 });

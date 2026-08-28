@@ -1,6 +1,6 @@
 {
   "name": "terera-a",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,css}\" \"scripts/*.{js,ts}\" \"*.{json,ts,md}\"",
     "make:icons": "node scripts/make-icons.js",
-    "make:tracks": "node scripts/make-tracks.js"
+    "make:tracks": "node scripts/make-tracks.js",
+    "make:coastlines": "node scripts/build-coastlines.js"
   },
   "private": true,
   "dependencies": {

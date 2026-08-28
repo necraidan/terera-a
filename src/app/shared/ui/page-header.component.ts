@@ -1,5 +1,6 @@
-import { Component, computed, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 
 /**
  * En-tête d'un écran : flèche de retour et titre.
@@ -7,10 +8,14 @@ import { RouterLink } from '@angular/router';
  * `sticky` avec un padding haut en safe-area, pour rester sous l'encoche en
  * standalone iPhone. La largeur suit celle de la page, sans quoi la flèche se
  * retrouverait seule au bord de l'écran sur desktop.
+ *
+ * La flèche revient en arrière dans l'historique quand l'entrée précédente
+ * est dans l'app : le routeur restaure alors la position de scroll de la liste.
+ * Un `routerLink` vers `backTo` ferait une navigation avant, remise en haut.
+ * `backTo` reste le repli (arrivée par URL directe ou icône d'accueil).
  */
 @Component({
   selector: 'ta-page-header',
-  imports: [RouterLink],
   styles: `
     :host {
       display: block;
@@ -24,7 +29,8 @@ import { RouterLink } from '@angular/router';
   template: `
     <div [class]="containerClass()">
       <a
-        [routerLink]="backTo()"
+        [href]="backTo()"
+        (click)="back($event)"
         class="grid size-11 shrink-0 place-items-center rounded-full text-ink-2 active:bg-surface-2"
         [attr.aria-label]="backLabel()"
       >
@@ -48,6 +54,23 @@ export class PageHeaderComponent {
   readonly backLabel = input<string>('Retour à l’accueil');
   /** Doit correspondre au gabarit du `main` de la page. */
   readonly width = input<'narrow' | 'wide' | 'prose'>('narrow');
+
+  private readonly location = inject(Location);
+  private readonly router = inject(Router);
+
+  /** `href` conserve l'ouverture dans un nouvel onglet ; le clic simple reste dans l'app. */
+  protected back(event: MouseEvent): void {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    event.preventDefault();
+    const state = this.location.getState() as { navigationId?: number } | null;
+    if ((state?.navigationId ?? 1) > 1) {
+      this.location.back();
+    } else {
+      void this.router.navigateByUrl(this.backTo());
+    }
+  }
 
   protected readonly containerClass = computed(
     () => `page-${this.width()} flex items-center gap-1 py-2`,

@@ -6,7 +6,7 @@
  * tracé couvre réellement.
  *
  * Un tracé est un schéma d'orientation, pas un outil de navigation : il est
- * simplifié, parfois partiel, et l'écran le dit.
+ * simplifié, parfois partielet l'écran le dit.
  */
 import { TrackPoint } from './hikes.models';
 

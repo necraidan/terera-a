@@ -1,6 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HikeFavoritesStore } from '../../shared/data/favorites.store';
+import { HIKE_BASEMAPS, ISLAND_OUTLINES } from '../../shared/data/hikes.basemap';
 import { HIKES } from '../../shared/data/hikes.data';
 import {
   DIFFICULTY_CLASSES,
@@ -11,7 +12,6 @@ import {
   formatElevation,
   formatHikeKm,
 } from '../../shared/data/hikes.models';
-import { HIKE_BASEMAPS, ISLAND_OUTLINES } from '../../shared/data/hikes.basemap';
 import { HIKE_TRACKS } from '../../shared/data/hikes.tracks';
 import { ARCHIPELAGOS, ISLANDS } from '../../shared/data/islands.data';
 import { HikeMapComponent } from '../../shared/ui/hike-map.component';
@@ -28,7 +28,7 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
       backLabel="Retour aux randonnées"
     />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       @let current = hike();
 
       @if (current) {
@@ -63,6 +63,21 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
         </div>
 
         <p class="mt-2 text-sm text-ink-2">{{ place() }}</p>
+
+        @if (current.image) {
+          <figure class="mt-3">
+            <img
+              [src]="current.image"
+              [alt]="current.name"
+              width="660"
+              height="440"
+              class="aspect-[3/2] w-full rounded-card object-cover"
+            />
+            <figcaption class="mt-1 text-xs text-ink-2">
+              Photo : {{ current.photoCredit }}.
+            </figcaption>
+          </figure>
+        }
 
         @if (current.warnings.length > 0) {
           <section class="mt-3 rounded-card border border-danger/40 bg-surface-1 p-4">
@@ -111,7 +126,7 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
             } @else {
               <p class="mt-1 text-sm leading-relaxed text-ink-2">
                 Aucun tracé disponible : ce sentier n’est pas cartographié dans les données
-                ouvertes, et dessiner une ligne approximative serait trompeur.
+                ouverteset dessiner une ligne approximative serait trompeur.
               </p>
             }
           </section>

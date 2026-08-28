@@ -27,7 +27,7 @@ const dateFormat = (timeZone: string) =>
   template: `
     <ta-page-header width="wide" title="Heure à Tahiti" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <div class="grid gap-3 sm:grid-cols-2">
         <section class="rounded-card bg-accent p-4 text-accent-ink">
           <p class="text-sm font-medium opacity-80">🌴 Tahiti (Papeete)</p>

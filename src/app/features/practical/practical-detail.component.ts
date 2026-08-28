@@ -8,7 +8,7 @@ import { PageHeaderComponent } from '../../shared/ui/page-header.component';
   template: `
     <ta-page-header width="wide" [title]="sheet()?.title ?? 'Fiche introuvable'" backTo="/infos" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       @let current = sheet();
 
       @if (current) {

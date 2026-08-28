@@ -4,12 +4,12 @@
  * FICHIER GÉNÉRÉ par `pnpm make:tracks`, ne pas éditer à la main.
  *
  * Le fond est trié, pas exhaustif : la côte, l'eau, les rivières, les routes,
- * les sentiers voisins assez longs pour être des options, et les sommets
+ * les sentiers voisins assez longs pour être des optionset les sommets
  * nommés. Les pistes et les ruisseaux courts sont écartés, sinon le tracé se
  * noierait dans son propre décor et le fond pèserait plus que toute l'app.
  *
  * Pas de tuiles raster : elles coûteraient des centaines de kilo-octets par
- * sentier à précharger, et laisseraient croire à un GPS.
+ * sentier à préchargeret laisseraient croire à un GPS.
  */
 import { HikeBaseMap, TrackPoint } from './hikes.models';
 

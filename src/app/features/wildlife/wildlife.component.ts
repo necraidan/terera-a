@@ -13,7 +13,7 @@ type Filter = 'tout' | 'saison' | 'prudence';
   template: `
     <ta-page-header width="wide" title="Faune marine" />
 
-    <main class="page-wide pb-28">
+    <main class="page-wide">
       <a
         routerLink="/faune/regles"
         class="flex items-center gap-3 rounded-card bg-surface-2 p-3 active:opacity-80"

@@ -12,6 +12,7 @@ import {
   PreloadAllModules,
   provideRouter,
   withComponentInputBinding,
+  withInMemoryScrolling,
   withNavigationErrorHandler,
   withPreloading,
 } from '@angular/router';
@@ -29,6 +30,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withComponentInputBinding(),
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
       withPreloading(PreloadAllModules),
       withNavigationErrorHandler(() => inject(UpdateService).reportBrokenCache()),
     ),

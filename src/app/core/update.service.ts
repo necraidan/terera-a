@@ -119,7 +119,7 @@ export class UpdateService {
    * Un écran n'a pas pu s'ouvrir : son morceau de code manque au cache.
    *
    * Le service worker ne signale `unrecoverable` que sur un 404 (fichier
-   * supprimé du serveur par un déploiement) ; hors ligne il rend un 504, et
+   * supprimé du serveur par un déploiement) ; hors ligne il rend un 504et
    * l'échec ne remonte que par l'erreur de navigation du routeur. C'est donc le
    * seul indice qu'on a d'un préchargement interrompu pendant un voyage.
    */
