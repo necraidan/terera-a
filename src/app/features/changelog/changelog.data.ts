@@ -11,6 +11,14 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    version: '1.1.1',
+    date: '2026-08-27',
+    changes: [
+      'Mode avion : l’app ne reste plus bloquée sur une page d’erreur quand l’installation hors ligne était incomplète.',
+      'Une installation incomplète se répare toute seule au retour du réseau.',
+    ],
+  },
+  {
     version: '1.1.0',
     date: '2026-08-27',
     changes: [

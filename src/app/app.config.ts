@@ -3,13 +3,20 @@ import localeFr from '@angular/common/locales/fr';
 import {
   ApplicationConfig,
   LOCALE_ID,
+  inject,
   isDevMode,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withNavigationErrorHandler,
+  withViewTransitions,
+} from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
+import { UpdateService } from './core/update.service';
 
 // App monolingue : les pipes ne doivent pas dépendre de la locale du navigateur.
 registerLocaleData(localeFr);
@@ -26,6 +33,10 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withViewTransitions({ skipInitialTransition: true }),
+      // Toutes les routes sont chargées à la demande et l'app n'a ni garde ni
+      // résolveur : une erreur de navigation ne peut venir que d'un morceau de
+      // code introuvable, donc d'un cache du service worker incomplet.
+      withNavigationErrorHandler(() => inject(UpdateService).reportBrokenCache()),
     ),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

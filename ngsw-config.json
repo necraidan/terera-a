@@ -3,17 +3,24 @@
   "index": "/index.html",
   "assetGroups": [
     {
+      "name": "shell",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/index.html",
+          "/main*.js",
+          "/polyfills*.js",
+          "/styles*.css",
+          "/manifest.webmanifest"
+        ]
+      }
+    },
+    {
       "name": "app",
       "installMode": "prefetch",
       "resources": {
-        "files": [
-          "/favicon.ico",
-          "/index.html",
-          "/manifest.webmanifest",
-          "/*.css",
-          "/*.js",
-          "/media/*.woff2"
-        ]
+        "files": ["/favicon.ico", "/favicon-32x32.png", "/*.css", "/*.js", "/media/*.woff2"]
       }
     },
     {

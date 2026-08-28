@@ -8,7 +8,7 @@ import {
 } from '@angular/service-worker';
 import { Subject } from 'rxjs';
 import { vi } from 'vitest';
-import { RELOAD_PAGE, UpdateService } from './update.service';
+import { IS_ONLINE, RELOAD_PAGE, UpdateService } from './update.service';
 
 const THROTTLE_MS = 60 * 1000;
 
@@ -19,6 +19,12 @@ const versionReady = (hash: string): VersionReadyEvent => ({
   latestVersion: { hash },
 });
 
+/** Le service worker signale une ressource introuvable dans son cache. */
+const damaged: UnrecoverableStateEvent = {
+  type: 'UNRECOVERABLE_STATE',
+  reason: 'ressource absente du cache',
+};
+
 interface Harness {
   readonly service: UpdateService;
   readonly versionUpdates: Subject<VersionEvent>;
@@ -28,6 +34,8 @@ interface Harness {
   readonly reload: ReturnType<typeof vi.fn>;
   /** Fait avancer l'horloge, pour sortir de la fenêtre d'anti-rebond. */
   advance(ms: number): void;
+  /** Simule le passage en mode avion, ou le retour du réseau. */
+  setOnline(value: boolean): void;
 }
 
 /**
@@ -36,7 +44,7 @@ interface Harness {
  * La vérification de démarrage est attendue puis les compteurs sont remis à
  * zéro : chaque test part d'un état propre et n'observe que ses propres appels.
  */
-async function setup({ enabled = true } = {}): Promise<Harness> {
+async function setup({ enabled = true, online = true } = {}): Promise<Harness> {
   const versionUpdates = new Subject<VersionEvent>();
   const unrecoverable = new Subject<UnrecoverableStateEvent>();
   const checkForUpdate = vi.fn().mockResolvedValue(false);
@@ -45,6 +53,8 @@ async function setup({ enabled = true } = {}): Promise<Harness> {
 
   let now = 1_000_000;
   vi.spyOn(Date, 'now').mockImplementation(() => now);
+
+  let connected = online;
 
   TestBed.configureTestingModule({
     providers: [
@@ -59,6 +69,7 @@ async function setup({ enabled = true } = {}): Promise<Harness> {
         },
       },
       { provide: RELOAD_PAGE, useValue: reload },
+      { provide: IS_ONLINE, useValue: () => connected },
     ],
   });
 
@@ -78,6 +89,9 @@ async function setup({ enabled = true } = {}): Promise<Harness> {
     advance(ms: number) {
       now += ms;
     },
+    setOnline(value: boolean) {
+      connected = value;
+    },
   };
 }
 
@@ -93,6 +107,10 @@ describe('UpdateService, service worker désactivé', () => {
     expect(service.enabled).toBe(false);
     expect(checkForUpdate).not.toHaveBeenCalled();
     expect(await service.check()).toBe('disabled');
+
+    // Sans service worker, une erreur de navigation n'a rien à voir avec un cache.
+    service.reportBrokenCache();
+    expect(service.cacheDamaged()).toBe(false);
 
     // Même si un évènement arrivait, aucun abonnement ne doit l'écouter.
     versionUpdates.next(versionReady('nouvelle'));
@@ -268,13 +286,23 @@ describe('UpdateService, application de la mise à jour', () => {
     expect(reload).toHaveBeenCalledTimes(1);
   });
 
-  it('recharge quand même si l’activation échoue', async () => {
+  it('recharge quand même si l’activation échoue, en ligne', async () => {
     const { service, activateUpdate, reload } = await setup();
     activateUpdate.mockRejectedValue(new Error('activation refusée'));
 
     await service.applyUpdate();
 
     expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('ne recharge pas sur une activation échouée hors ligne', async () => {
+    const { service, activateUpdate, reload } = await setup({ online: false });
+    activateUpdate.mockRejectedValue(new Error('activation refusée'));
+
+    await service.applyUpdate();
+
+    // Sans réseau, la coquille peut manquer au cache : recharger tuerait l'app.
+    expect(reload).not.toHaveBeenCalled();
   });
 
   it('ne recharge jamais de lui-même quand une version devient prête', async () => {
@@ -286,14 +314,66 @@ describe('UpdateService, application de la mise à jour', () => {
     expect(reload).not.toHaveBeenCalled();
   });
 
-  it('recharge sur un état irrécupérable du cache', async () => {
-    const { unrecoverable, reload } = await setup();
+  it('recharge sur un état irrécupérable du cache, en ligne', async () => {
+    const { service, unrecoverable, reload } = await setup();
 
-    unrecoverable.next({
-      type: 'UNRECOVERABLE_STATE',
-      reason: 'ressource absente du cache',
-    });
+    unrecoverable.next(damaged);
 
     expect(reload).toHaveBeenCalledTimes(1);
+    expect(service.cacheDamaged()).toBe(true);
+  });
+});
+
+describe('UpdateService, cache abîmé hors ligne', () => {
+  it('ne recharge pas et laisse l’app dégradée en vie', async () => {
+    const { service, unrecoverable, reload } = await setup({ online: false });
+
+    unrecoverable.next(damaged);
+
+    // Recharger hors ligne échangerait l'app contre la page d'erreur de Safari.
+    expect(reload).not.toHaveBeenCalled();
+    expect(service.cacheDamaged()).toBe(true);
+  });
+
+  it('recharge dès le retour du réseau', async () => {
+    const { unrecoverable, reload, setOnline } = await setup({ online: false });
+
+    unrecoverable.next(damaged);
+    expect(reload).not.toHaveBeenCalled();
+
+    setOnline(true);
+    window.dispatchEvent(new Event('online'));
+
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('signale un écran introuvable sans tuer l’app', async () => {
+    const { service, reload } = await setup({ online: false });
+
+    // Un morceau de code manquant hors ligne : le routeur échoue, mais l'app
+    // affichée reste utilisable.
+    service.reportBrokenCache();
+
+    expect(service.cacheDamaged()).toBe(true);
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  it('ne recharge qu’une fois même si plusieurs écrans échouent', async () => {
+    const { service, reload } = await setup();
+
+    service.reportBrokenCache();
+    service.reportBrokenCache();
+
+    // Une boucle de rechargements serait pire que l'écran manquant.
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('ne recharge pas au retour du réseau si le cache est sain', async () => {
+    const { reload, setOnline } = await setup({ online: false });
+
+    setOnline(true);
+    window.dispatchEvent(new Event('online'));
+
+    expect(reload).not.toHaveBeenCalled();
   });
 });
