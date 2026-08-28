@@ -11,6 +11,16 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    version: '1.2.0',
+    date: '2026-08-29',
+    changes: [
+      'Nouvel outil : Randonnées. Les sentiers de Tahiti, de sa presqu’île et de Moorea, filtrables par île, difficulté, longueur et durée.',
+      'Chaque fiche porte le plan du sentier, ses points de repère et son échelle, dessinés hors ligne depuis les coordonnées.',
+      'Avertissements, niveau d’encadrement et accès réglementés annoncés avant le reste, avec la provenance des données et la date de vérification.',
+      'Depuis la carte, un raccourci vers les randonnées de l’île sélectionnée.',
+    ],
+  },
+  {
     version: '1.1.1',
     date: '2026-08-27',
     changes: [

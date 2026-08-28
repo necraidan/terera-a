@@ -6,24 +6,37 @@ C'est une PWA installable, pensée pour l'iPhone et pour **fonctionner entièrem
 
 ## Les outils
 
-| Outil                  | Ce qu'il fait                                                                                                                                                                                                                                                       |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Convertisseur**      | Franc pacifique ↔ Euro, dans les deux sens, avec montants rapides. Repose sur la parité fixe légale (1 € = 119,331742 F) : le taux ne varie pas, donc aucune API n'est nécessaire.                                                                                  |
-| **Billets et pièces**  | Les quatre billets et les six pièces de la série en cours, dessinés à l'échelle réelle. Couleurs, motifs, dimensions, équivalent en euros, ce que chaque coupure permet d'acheteret les pièges de reconnaissance (le 20 F argenté est plus large que le 50 F doré). |
-| **Heure**              | Heure de Tahiti et de la France côte à côte, décalage courant (11 h ou 12 h selon l'heure d'été française), convertisseur d'heure avec bascule de jouret créneau raisonnable pour appeler la famille.                                                               |
-| **Unités**             | Milles nautiques, nœuds, pieds, brasses, degrés Fahrenheit. Tous les facteurs sont des définitions exactes.                                                                                                                                                         |
-| **Soleil et marées**   | Lever, coucher, aube et nuit civile calculés localement pour 19 îles avec l'algorithme solaire de la NOAA. Plus le régime de marée par archipel, dont le cas remarquable de la Société où les heures suivent le soleil et non la lune.                              |
-| **Carte et distances** | Les cinq archipels sur une carte hors ligne, les îles positionnées selon leurs coordonnées réelles, avec échelle. Distances et caps calculés depuis les coordonnées, durées de vol et liaisons maritimes.                                                           |
-| **Faune marine**       | 18 espèces avec nom tahitien, saison de présence, niveau de risque réel pour l'humain, règles d'approche et statut de protection. Plus la réglementation du sanctuaire des mammifères marins.                                                                       |
-| **Lexique**            | Une centaine de mots et expressions de reo tahiti, plus 56 noms de lieux avec leur prononciation. Recherche insensible aux accents, favoriset une page de règles de prononciation.                                                                                  |
-| **Infos pratiques**    | Urgences (numéros cliquables), téléphone et indicatif +689, électricité, usages et politesse, monnaie, saisons et jours fériés.                                                                                                                                     |
-| **Liens utiles**       | 47 sites officiels et pérennes, vérifiés un par un et rangés par usage. C'est le seul écran qui demande une connexionet il le dit.                                                                                                                                  |
+| Outil                  | Ce qu'il fait                                                                                                                                                                                                                                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Convertisseur**      | Franc pacifique ↔ Euro, dans les deux sens, avec montants rapides. Repose sur la parité fixe légale (1 € = 119,331742 F) : le taux ne varie pas, donc aucune API n'est nécessaire.                                                                                                                      |
+| **Billets et pièces**  | Les quatre billets et les six pièces de la série en cours, dessinés à l'échelle réelle. Couleurs, motifs, dimensions, équivalent en euros, ce que chaque coupure permet d'acheteret les pièges de reconnaissance (le 20 F argenté est plus large que le 50 F doré).                                     |
+| **Heure**              | Heure de Tahiti et de la France côte à côte, décalage courant (11 h ou 12 h selon l'heure d'été française), convertisseur d'heure avec bascule de jouret créneau raisonnable pour appeler la famille.                                                                                                   |
+| **Unités**             | Milles nautiques, nœuds, pieds, brasses, degrés Fahrenheit. Tous les facteurs sont des définitions exactes.                                                                                                                                                                                             |
+| **Soleil et marées**   | Lever, coucher, aube et nuit civile calculés localement pour 19 îles avec l'algorithme solaire de la NOAA. Plus le régime de marée par archipel, dont le cas remarquable de la Société où les heures suivent le soleil et non la lune.                                                                  |
+| **Carte et distances** | Les cinq archipels sur une carte hors ligne, les îles positionnées selon leurs coordonnées réelles, avec échelle. Distances et caps calculés depuis les coordonnées, durées de vol et liaisons maritimes.                                                                                               |
+| **Faune marine**       | 18 espèces avec nom tahitien, saison de présence, niveau de risque réel pour l'humain, règles d'approche et statut de protection. Plus la réglementation du sanctuaire des mammifères marins.                                                                                                           |
+| **Randonnées**         | Les sentiers de Tahiti, de sa presqu'île et de Moorea, filtrables par île, difficulté, longueur et durée. Chaque fiche porte le plan du sentier tracé depuis les coordonnées, ses avertissements, le niveau d'encadrement, les accès réglementés, la provenance des données et la date de vérification. |
+| **Lexique**            | Une centaine de mots et expressions de reo tahiti, plus 56 noms de lieux avec leur prononciation. Recherche insensible aux accents, favoriset une page de règles de prononciation.                                                                                                                      |
+| **Infos pratiques**    | Urgences (numéros cliquables), téléphone et indicatif +689, électricité, usages et politesse, monnaie, saisons et jours fériés.                                                                                                                                                                         |
+| **Liens utiles**       | 47 sites officiels et pérennes, vérifiés un par un et rangés par usage. C'est le seul écran qui demande une connexionet il le dit.                                                                                                                                                                      |
 
 ## Sur la vérification du contenu
 
 Le contenu factuel a été recherché puis soumis à une relecture adversariale, chargée de réfuter chaque affirmation plutôt que de la valider. Plusieurs erreurs ont ainsi été corrigées avant intégration : une distance inter-îles fausse de 100 km, une série de pièces obsolète, une affirmation inexacte sur le rôle du calendrier lunaire dans les marées, des noms tahitiens non attestés, un prix de repas sous-évalué.
 
 Les données qui peuvent se vérifier par le calcul le sont : aucune distance n'est stockée, elles sont dérivées des coordonnéeset un test compare les distances obtenues aux valeurs publiées ainsi que les durées de vol aux vitesses plausibles d'un ATR.
+
+### Les plans de randonnée
+
+Les tracés viennent d'**OpenStreetMap**, sous licence ODbL, qui impose l'attribution : chaque plan porte son crédit à l'écran. Ils ne sont pas saisis à la main mais générés par [make-tracks.js](scripts/make-tracks.js), où les chemins retenus sont déclarés un par un par leur identifiant OSM, avec ce que le tracé couvre réellement. Aucune sélection automatique par proximité : sans cette liste explicite, une mise à jour d'OSM pourrait faire passer silencieusement un tracé par un sentier voisin.
+
+Quatre des huit tracés sont **partiels**, parce que le bas de l'approche ou la piste d'accès n'est pas cartographié. La fiche le dit, et le trait est dessiné en pointillés. Te Pari, sur la presqu'île, n'a aucun tracé : la côte n'est pas dans OSM, et dessiner une ligne approximative sur un littoral sans échappatoire serait la pire des approximations. L'écran l'annonce plutôt que de meubler.
+
+Le fond de carte est **vectoriel, pas raster**, et c'est le cœur du compromis. Des tuiles d'image coûteraient des centaines de kilo-octets par sentier, à précharger pour un usage hors ligne. Une poignée de polylignes triées tient en quelques kilo-octets : la côte, les plans d'eau, les rivières, les routes, les sentiers voisins assez longs pour être des options, et les sommets nommés avec leur altitude. Le brut est inexploitable, cinq cents pistes et deux cent soixante-dix ruisseaux pour une seule emprise noieraient le tracé, donc le script filtre par nature et par longueur, découpe sur le cadre et simplifie jusqu'à tenir un budget de points. Chaque plan porte aussi un **encart de localisation** : la silhouette de l'île et un point sur le sentier, parce qu'à l'échelle d'une vallée le plan ne dit pas de lui-même où l'on se trouve.
+
+Un plan reste un **schéma d'orientation, pas un outil de navigation**, et il le dit sous chaque tracé : il n'y a ni position GPS, ni balisage sur le terrain.
+
+Le lien entre les deux est vérifié par le calcul : la longueur de la polyligne, sommée par `haversineKm`, est comparée à la distance publiée, en tenant compte du fait qu'un aller-retour annonce la distance totale quand le tracé ne décrit qu'un aller. Un tracé annoncé complet doit tomber à moins de trente pour cent de la distance publiée, un tracé partiel doit être franchement plus court. Le plan ne peut donc pas mentir sur la distance, ni la distance sur le plan.
 
 ### Photos
 
@@ -41,6 +54,7 @@ pnpm lint
 pnpm test
 pnpm format
 pnpm make:icons     # régénère les icônes depuis le SVG de scripts/make-icons.js
+pnpm make:tracks    # régénère les tracés de randonnée depuis OpenStreetMap
 ```
 
 Stack : Angular 22 standalone et zoneless, Tailwind CSS 4 (tokens dans `src/styles.css`), `@angular/service-worker`, tests Vitest.

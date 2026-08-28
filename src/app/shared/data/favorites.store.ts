@@ -47,6 +47,14 @@ export class LinkFavoritesStore extends FavoritesSet {
   }
 }
 
+/** Randonnées mises de côté, remontées en tête de la liste. */
+@Injectable({ providedIn: 'root' })
+export class HikeFavoritesStore extends FavoritesSet {
+  constructor() {
+    super('hikes:favorites');
+  }
+}
+
 function read(key: string): ReadonlySet<string> {
   const raw = readStored(key);
   if (raw === null) {

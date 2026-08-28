@@ -1,4 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { HIKES } from '../../shared/data/hikes.data';
 import {
   bearingLabel,
   boundsOf,
@@ -39,7 +41,7 @@ const LABEL_SPACING = 24;
 
 @Component({
   selector: 'ta-islands',
-  imports: [PageHeaderComponent],
+  imports: [RouterLink, PageHeaderComponent],
   template: `
     <ta-page-header width="wide" title="Carte et distances" />
 
@@ -159,6 +161,15 @@ const LABEL_SPACING = 24;
             <dd class="font-semibold">{{ selected().access.join(', ') }}</dd>
           </div>
         </dl>
+        @if (hikeCount() > 0) {
+          <a
+            class="mt-4 inline-block font-semibold underline underline-offset-4"
+            routerLink="/randonnees"
+            [queryParams]="{ ile: selected().id }"
+          >
+            {{ hikeLabel() }} sur cette île ›
+          </a>
+        }
       </section>
 
       <h2 class="mt-8 mb-2 text-sm font-semibold tracking-wide text-ink-2 uppercase">
@@ -309,6 +320,16 @@ export class IslandsComponent {
   protected readonly population = computed(() =>
     new Intl.NumberFormat('fr-FR').format(this.selected().population),
   );
+
+  /** Dérivé de HIKES : aucune île ne déclare ses randonnées de son côté. */
+  protected readonly hikeCount = computed(
+    () => HIKES.filter((hike) => hike.islandId === this.selected().id).length,
+  );
+
+  protected readonly hikeLabel = computed(() => {
+    const count = this.hikeCount();
+    return count === 1 ? '1 randonnée' : `${count} randonnées`;
+  });
 
   protected readonly flightLabel = computed(() => {
     const minutes = this.selected().flightMinutesFromPapeete ?? 0;

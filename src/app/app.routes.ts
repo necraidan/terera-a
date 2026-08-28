@@ -64,6 +64,16 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'randonnees',
+    title: 'Randonnées · Terera’a',
+    loadComponent: () => import('./features/hikes/hikes.component').then((m) => m.HikesComponent),
+  },
+  {
+    path: 'randonnees/:id',
+    loadComponent: () =>
+      import('./features/hikes/hike-detail.component').then((m) => m.HikeDetailComponent),
+  },
+  {
     path: 'lexique/prononciation',
     title: 'Prononcer le tahitien · Terera’a',
     loadComponent: () =>

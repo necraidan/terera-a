@@ -24,6 +24,7 @@ const TOOLS: readonly Tool[] = [
   { icon: '🌊', label: 'Soleil et marées', hint: 'Par île, hors ligne', route: '/soleil-marees' },
   { icon: '🗺️', label: 'Carte et distances', hint: 'Les cinq archipels', route: '/carte' },
   { icon: '🐋', label: 'Faune marine', hint: 'Saisons et distances', route: '/faune' },
+  { icon: '🥾', label: 'Randonnées', hint: 'Sentiers par île et niveau', route: '/randonnees' },
   { icon: '🗣️', label: 'Lexique', hint: 'Parler quelques mots', route: '/lexique' },
   { icon: '📌', label: 'Infos pratiques', hint: 'Urgences, prises, usages', route: '/infos' },
   { icon: '🔗', label: 'Liens utiles', hint: 'Sites officiels, météo', route: '/liens' },
